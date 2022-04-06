@@ -21,25 +21,24 @@ classdef optimizer
                 obj.opt = 'SGD';
                 obj.lr = lr;
             
-            elseif strcmp(opt, 'Adam')
-                % Initialize settings for the Adam optimizer
-                obj.opt = 'Adam';
-                obj.lr = lr;
-                obj.m = MLP(mlp.size_hl1, mlp.size_hl2)*0;
-                obj.v = MLP(mlp.size_hl1, mlp.size_hl2)*0;
-                obj.beta1 = 0.9;
-                obj.beta2 = 0.999;
-                obj.t = 0;
-
-            elseif strcmp(opt, 'Adagrad')
-                % Initialize settings for the Adagrad optimizer
-                obj.opt = 'Adagrad';
-                obj.lr = lr;
-                obj.a0 = MLP(mlp.size_hl1, mlp.size_hl2)*0;
-                obj.sumGradSqrt = MLP(mlp.size_hl1, mlp.size_hl2)*0;
-                obj.beta1 = 0.9;
+                elseif strcmp(opt, 'Adam')
+                    % Initialize settings for the Adam optimizer
+                    obj.opt = 'Adam';
+                    obj.lr = lr;
+                    obj.m = MLP(mlp.size_hl1, mlp.size_hl2)*0;
+                    obj.v = MLP(mlp.size_hl1, mlp.size_hl2)*0;
+                    obj.beta1 = 0.9;
+                    obj.beta2 = 0.999;
+                    obj.t = 0;
+    
+                elseif strcmp(opt, 'Adagrad')
+                    % Initialize settings for the Adagrad optimizer
+                    obj.opt = 'Adagrad';
+                    obj.lr = lr;
+                    obj.a0 = MLP(mlp.size_hl1, mlp.size_hl2)*0;
+                    obj.sumGradSqrt = MLP(mlp.size_hl1, mlp.size_hl2)*0 + nn.grad^2;
+                    obj.beta1 = 0.9;
             
-            end
         end
             
         function [nn, obj] = step(obj, nn)
@@ -56,23 +55,23 @@ classdef optimizer
                 obj.v = obj.beta2*obj.v + (1-obj.beta2)*(nn.grad^2);
                 
                 % Step the model parameters
-                momentumMean = obj.m * (1 / (1-obj.beta1^obj.t));     
-                momentumVariance = obj.v * (1 / (1-obj.beta2^obj.t));
+                momentumMean = obj.m / (1-obj.beta1^obj.t);     
+                momentumVariance = obj.v / (1-obj.beta2^obj.t);
                 epsilon =  10^-8;
                     
-                nn.mlp = nn.mlp - obj.lr * momentumMean / ((momentumVariance)^0.5 + epsilon);
+                nn.mlp = nn.mlp - obj.lr * momentumMean / (sqrt(momentumVariance) + epsilon);
                 %nn.mlp = nn.mlp - obj.lr * ((obj.m*(1/(1-obj.beta1^obj.t))) / ((obj.v*(1/(1-obj.beta2^obj.t)))^0.5 + 10^-8)); 
                 
 
-            elseif strcmp(obj.opt, 'Adagrad')
+            elseif strcomp(obj.opt, 'Adagrad')
 
                 epsilon =  10^-8;
 
-                obj.sumGradSqrt = obj.sumGradSqrt + (nn.grad^2);
+                obj.sumGradSqrt = obj.sumGradSqrt + nn.grad^2;
 
                 gradient = nn.grad;
 
-                nn.mlp = nn.mlp - obj.lr * gradient / ((obj.sumGradSqrt + epsilon)^0.5); 
+                nn.mlp = nn.mlp - obj.lr * gradient / (sqrt(obj.sumGradSqrt + epsilon)); 
                 
 
             end
@@ -80,4 +79,4 @@ classdef optimizer
 
     end
     
-end
+end;

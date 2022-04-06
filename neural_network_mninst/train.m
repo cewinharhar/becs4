@@ -1,5 +1,8 @@
+%%
 rng(0); % seed for the random number generator
-cd 'C:\Users\kevin yar\Desktop\neural_network_mnist\neural_network_mninst'
+cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
+
+%%
 disp('Loading data...')
 
 % load train data
@@ -36,7 +39,7 @@ size_hl2 = 50; % Number of neurons in the second hidden layer
 
 % Construct model with specifed optimizer for training
 lr = 0.001; % learning rate
-model = NN(size_hl1, size_hl2, 'Adam', lr);
+model = NN(size_hl1, size_hl2, 'Adagrad', lr);
 
 % Alternatively with SGD optimizer
 % lr = 0.1;

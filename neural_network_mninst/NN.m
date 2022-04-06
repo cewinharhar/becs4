@@ -13,6 +13,7 @@ classdef NN
         
     end
     methods
+        
         function obj = NN(size_hl1, size_hl2, opt, lr)
             obj.m = 0;
             
