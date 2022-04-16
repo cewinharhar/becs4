@@ -63,10 +63,10 @@ classdef NN
             % Step the optimizer (Gradient descent)
             [obj, obj.optim] = obj.optim.step(obj);
             
-            % Reset gradients
+            % Reset gradients counter
             obj.m = 0;
+            % reset gradient
             obj.grad = obj.grad*0;
-
         end
         
         function score = predict(obj, input)

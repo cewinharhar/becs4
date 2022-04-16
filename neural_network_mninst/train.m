@@ -1,6 +1,8 @@
 %%
 rng(0); % seed for the random number generator
-cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
+%%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
+cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
+
 
 %%
 disp('Loading data...')
@@ -11,8 +13,10 @@ train_data = load('mnist_train.csv');
 labels = train_data(:,1);
 y = zeros(10,length(train_data)); % output labels for training
 for i = 1:length(train_data)
+    %one hot encoding
     y(labels(i)+1,i) = 1;
 end
+%%
 
 % preprocessing
 images = train_data(:,2:785);
@@ -29,7 +33,9 @@ end
 
 % preproessing
 test_images = test_data(:,2:785);
+% normalize data
 test_images = test_images/255;
+% transposing
 test_images = test_images';
 
 
