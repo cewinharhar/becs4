@@ -1,6 +1,5 @@
 %%
-%we dont need random is the genetic algorithm is used   
-%rng(0); % seed for the random number generator
+rng(0); % seed for the random number generator
 %%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
 cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 
@@ -12,7 +11,7 @@ disp('Loading data...')
 train_data = load('mnist_train.csv');
 
 %reduce data volume to increase difficulty
-train_data = train_data(1:20000,:);
+train_data = train_data()
 
 labels = train_data(:,1);
 y = zeros(10,length(train_data)); % output labels for training
@@ -21,7 +20,7 @@ for i = 1:length(train_data)
     y(labels(i)+1,i) = 1;
 end
 %%
-    
+
 % preprocessing
 images = train_data(:,2:785);
 images = images/255;
@@ -55,7 +54,7 @@ model = NN(size_hl1, size_hl2, 'Adagrad', lr);
 % lr = 0.1;
 % model = NN(hn1, hn2, 'SGD', lr);
 
-epochs = 3; % Number of training epochs
+epochs = 10; % Number of training epochs
 
 batch_size = 100; % Mini-batch size
 
