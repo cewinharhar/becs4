@@ -1,5 +1,6 @@
 %%
-rng(0); % seed for the random number generator
+%we dont need random is the genetic algorithm is used   
+%rng(0); % seed for the random number generator
 %%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
 cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 
@@ -11,7 +12,7 @@ disp('Loading data...')
 train_data = load('mnist_train.csv');
 
 %reduce data volume to increase difficulty
-train_data = train_data()
+train_data = train_data(1:10000,:);
 
 labels = train_data(:,1);
 y = zeros(10,length(train_data)); % output labels for training
@@ -20,7 +21,7 @@ for i = 1:length(train_data)
     y(labels(i)+1,i) = 1;
 end
 %%
-
+    
 % preprocessing
 images = train_data(:,2:785);
 images = images/255;
@@ -41,20 +42,31 @@ test_images = test_images/255;
 % transposing
 test_images = test_images';
 
+%%
 
-size_hl1 = 100; % Number of neurons in the first hidden layer
-size_hl2 = 50; % Number of neurons in the second hidden layer
+%make for loop to iterate over all optimization methods
+
+
+
+for opt = {'Adam', 'Adagrad', 'SDG'}
+    disp(opt)
+end
+
+%%
+
+size_hl1 = 128; % Number of neurons in the first hidden layer
+size_hl2 = 64; % Number of neurons in the second hidden layer
 
 
 % Construct model with specifed optimizer for training
 lr = 0.001; % learning rate
-model = NN(size_hl1, size_hl2, 'Adagrad', lr);
+model = NN(size_hl1, size_hl2, 'Adam', lr);
 
 % Alternatively with SGD optimizer
 % lr = 0.1;
 % model = NN(hn1, hn2, 'SGD', lr);
 
-epochs = 10; % Number of training epochs
+epochs = 2; % Number of training epochs
 
 batch_size = 100; % Mini-batch size
 

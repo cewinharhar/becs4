@@ -44,9 +44,21 @@ test_images = test_images';
 
 %%
 
+%set NN size
 size_hl1 = 128; % Number of neurons in the first hidden layer
 size_hl2 = 64; % Number of neurons in the second hidden layer
 
+%create container (dictionair equivalent) to store models
+nnAdam = NN(size_hl1, size_hl2, 'Adam', lr);
+
+
+%make for loop to iterate over all optimization methods
+for opt = {'Adam', 'Adagrad', 'SDG'}
+    model(opt) = NN(size_hl1, size_hl2, opt, lr);
+end
+
+
+%%
 
 % Construct model with specifed optimizer for training
 lr = 0.001; % learning rate
