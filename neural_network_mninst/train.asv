@@ -29,6 +29,8 @@ images = images'; % Input vectors for training
 
 % load test data
 test_data = load('mnist_test.csv');
+
+%reduce test data
 test_labels = test_data(:,1);
 test_y = zeros(10,10000);
 for i = 1:length(test_data)

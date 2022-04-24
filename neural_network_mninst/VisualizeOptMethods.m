@@ -5,7 +5,7 @@
 cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 
 
-%%
+%% training data
 disp('Loading data...')
 
 % load train data
@@ -20,17 +20,21 @@ for i = 1:length(train_data)
     %one hot encoding
     y(labels(i)+1,i) = 1;
 end
-%%
-    
+
 % preprocessing
 images = train_data(:,2:785);
 images = images/255;
 images = images'; % Input vectors for training
 
+%% test data
+    
 % load test data
 test_data = load('mnist_test.csv');
+%reduce test data
+test_data = test_data(1:5000, :);
+
 test_labels = test_data(:,1);
-test_y = zeros(10,10000);
+test_y = zeros(10 ,length(test_data));
 for i = 1:length(test_data)
     test_y(test_labels(i)+1,i) = 1;
 end
@@ -75,6 +79,7 @@ figure('Name','Comparison optimization methods')
 %create accuracy and error arrays
 acc = [];
 err = [];
+trained_models = [];
 
 cou = 0;
 plotCol = ["o", "s"];
@@ -91,7 +96,7 @@ for nn = [nnAdam, nnAda]
     end
 
     %specify parameters
-    epochs = 3; % Number of training epochs
+    epochs = 10; % Number of training epochs
     batch_size = 100; % Mini-batch size
 
     %iterate over epochs
@@ -116,7 +121,7 @@ for nn = [nnAdam, nnAda]
             samples = samples + batch_size;
         
         end
-
+        
         disp(nn.optim.opt);
         fprintf('Epochs:');
         disp(e) % Track number of epochs
@@ -148,6 +153,8 @@ for nn = [nnAdam, nnAda]
         
         [images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
     end
+
+    trained_models = [trained_models, nn];
     
     %plot the accuracy
     
