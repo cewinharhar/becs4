@@ -55,8 +55,34 @@ nnSDG = NN(size_hl1, size_hl2, 'SDG', lr);
 
 %%
 
+
+%initialize figure
+figure('Name','Comparison optimization methods')
+    grid on;
+
+    % --- Titelei
+    title('Comparison optimization methods');
+    xlabel('Epochs');
+
+    yyaxis left
+    ylabel('Accuracy [%]');
+
+    yyaxis right 
+    ylabel("Error [RMSE]")
+    %legend('Methane','Location','best');
+    hold on
+
+%create accuracy and error arrays
+acc = [];
+err = [];
+
+cou = 0;
+plotCol = ["o", "s"];
 %make for loop to iterate over all optimization methods
-for nn = [nnAdam, nnAda, nnSDG]
+for nn = [nnAdam, nnAda]
+
+     %for plot color
+    cou = cou + 1;
     
     if strcmp(nn.optim.opt,'SDG')
         lr = 0.1;
@@ -65,7 +91,7 @@ for nn = [nnAdam, nnAda, nnSDG]
     end
 
     %specify parameters
-    epochs = 4; % Number of training epochs
+    epochs = 3; % Number of training epochs
     batch_size = 100; % Mini-batch size
 
     %iterate over epochs
@@ -110,87 +136,39 @@ for nn = [nnAdam, nnAda, nnSDG]
             end
     
         end
+        
+        acc = [acc, hits/n*100];
+        err = [err, nn.error4];
+
         fprintf('Accuracy: ');
         fprintf('%f',hits/n*100);
         disp(' %');
         disp(' ');
-        
+       
         
         [images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
     end
+    
+    %plot the accuracy
+    
+    yyaxis left
+    scatter([1:length(acc)], acc, 'filled',plotCol(cou), "DisplayName", nn.optim.opt)
+    plot([1:length(acc)], acc, 'HandleVisibility','off')
 
+    yyaxis right
+    scatter([1:length(acc)], err, 'filled', plotCol(cou), 'HandleVisibility','off')
+    plot([1:length(acc)], err, 'HandleVisibility','off')
+    drawnow
+
+    acc = [];
+    err = [];
+    hold on
 
 end
 
+legend show
+hold off
 
-
-%%
-
-for oh = [nnAdam]
-    if strcmp(oh.optim.opt, "Adam")
-        disp("hi")
-    end
-end
-
-
-%%
-
-
-
-disp('Starting epoch 1');
-disp(' ');
-
-% Epoch loop
-for e = 1:epochs 
-    
-    samples = 1;
-    
-    % Loop over gradient descent steps
-    for j = 1:length(train_data)/batch_size 
-        
-        for i = samples:samples+batch_size-1 % Loop over each minibatch
-
-            % Calculate gradients with backpropagation
-            model = model.backpropagate(images(:,i), y(:,i));
-            
-        end
-    
-        % Gradient descent (optimizer step)
-        model = model.step();
-          
-        % Number of data points covered (+1)
-        samples = samples + batch_size;
-    
-    end
-    
-    fprintf('Epochs:');
-    disp(e) % Track number of epochs
-    
-    
-    % Evaluate model accuracy
-    disp('Evaluating model')
-    hits = 0;
-    n = length(test_data);
-    for i = 1:n
-
-        out = model.predict(test_images(:,i)); % model prediction vector
-        [~, num] = max(out); % Find highest prediction score
-
-        if test_labels(i) == (num-1)
-            hits = hits + 1; % Count the number of correct classifications
-        end
-
-    end
-    fprintf('Accuracy: ');
-    fprintf('%f',hits/n*100);
-    disp(' %');
-    disp(' ');
-    
-    
-    [images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
-end
-
-disp('Done');
 
 
 

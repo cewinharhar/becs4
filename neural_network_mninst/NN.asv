@@ -55,8 +55,7 @@ classdef NN
             obj.grad.W2 = obj.grad.W2 + error3*a2';
             obj.grad.W1 = obj.grad.W1 + error2*a1';
             
-            %add error 
-            obj.error4 = mean(error4 .^2);
+            %
 
             obj.m = obj.m + 1; % Count number of samples in batch
         end
