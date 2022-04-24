@@ -50,27 +50,92 @@ size_hl2 = 64; % Number of neurons in the second hidden layer
 
 %create container (dictionair equivalent) to store models
 nnAdam = NN(size_hl1, size_hl2, 'Adam', lr);
+nnAda = NN(size_hl1, size_hl2, 'Adagrad', lr);
+nnSDG = NN(size_hl1, size_hl2, 'SDG', lr);
 
+%%
 
 %make for loop to iterate over all optimization methods
-for opt = {'Adam', 'Adagrad', 'SDG'}
-    model(opt) = NN(size_hl1, size_hl2, opt, lr);
+for nn = [nnAdam, nnAda, nnSDG]
+    
+    if strcmp(nn.optim.opt,'SDG')
+        lr = 0.1;
+    else
+        lr = 0.001;
+    end
+
+    %specify parameters
+    epochs = 4; % Number of training epochs
+    batch_size = 100; % Mini-batch size
+
+    %iterate over epochs
+    for e = 1:epochs 
+        
+        samples = 1;
+        
+        % Loop over gradient descent steps
+        for j = 1:length(train_data)/batch_size 
+            
+            for i = samples:samples+batch_size-1 % Loop over each minibatch
+    
+                % Calculate gradients with backpropagation
+                nn = nn.backpropagate(images(:,i), y(:,i));
+                
+            end
+        
+            % Gradient descent (optimizer step)
+            nn = nn.step();
+              
+            % Number of data points covered (+1)
+            samples = samples + batch_size;
+        
+        end
+
+        disp(nn.optim.opt);
+        fprintf('Epochs:');
+        disp(e) % Track number of epochs
+        
+        
+        % Evaluate model accuracy
+        disp('Evaluating model')
+        hits = 0;
+        n = length(test_data);
+        for i = 1:n
+    
+            out = nn.predict(test_images(:,i)); % model prediction vector
+            [~, num] = max(out); % Find highest prediction score
+    
+            if test_labels(i) == (num-1)
+                hits = hits + 1; % Count the number of correct classifications
+            end
+    
+        end
+        fprintf('Accuracy: ');
+        fprintf('%f',hits/n*100);
+        disp(' %');
+        disp(' ');
+        
+        
+        [images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
+    end
+
+
+end
+
+
+
+%%
+
+for oh = [nnAdam]
+    if strcmp(oh.optim.opt, "Adam")
+        disp("hi")
+    end
 end
 
 
 %%
 
-% Construct model with specifed optimizer for training
-lr = 0.001; % learning rate
-model = NN(size_hl1, size_hl2, 'Adam', lr);
 
-% Alternatively with SGD optimizer
-% lr = 0.1;
-% model = NN(hn1, hn2, 'SGD', lr);
-
-epochs = 2; % Number of training epochs
-
-batch_size = 100; % Mini-batch size
 
 disp('Starting epoch 1');
 disp(' ');
