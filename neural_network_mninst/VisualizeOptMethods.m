@@ -179,15 +179,6 @@ end
 legend show
 hold off
 
-%% try genetic algorithm
-
-% generate 10 models with adam as optimizer
-
-models = [];
-for i = 1:10
-    nnMod = NN(size_hl1, size_hl2, 'Adam', lr);
-    models = [models, nnMod];
-end
 
 %%
 a = genAlg([nnAdam, nnAda], test_data, test_images, test_labels, 0.1);
