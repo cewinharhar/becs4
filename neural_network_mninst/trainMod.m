@@ -1,6 +1,6 @@
 %% trainMod
 %function to train multiple models with different random values
-function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_size, images, y, nrOfModels)
+function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_size, images, train_data, y, nrOfModels)
     %create container (dictionair equivalent) to store models   
     modelArray = [];
 
@@ -31,14 +31,4 @@ function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_
 
 end
 
-%%
 
-
-f = waitbar(0, 'Starting');
-n = 100;
-for i= 1:n
-    disp("duh")
-    waitbar(i/n, f, sprintf('Progress: %d %%', floor(i/n*100)));
-    pause(0.1);
-end
-close(f)
