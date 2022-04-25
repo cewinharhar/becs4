@@ -2,7 +2,7 @@
 %we dont need random is the genetic algorithm is used   
 %rng(0); % seed for the random number generator
 %%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
-cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
+%cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 
 
 %%
@@ -53,7 +53,7 @@ size_hl2 = 64; % Number of neurons in the second hidden layer
 
 % Construct model with specifed optimizer for training
 lr = 0.001; % learning rate
-model = NN(size_hl1, size_hl2, 'Adam', lr);
+model = NN(size_hl1, size_hl2, 'Adagrad', lr);
 
 % Alternatively with SGD optimizer
 % lr = 0.1;

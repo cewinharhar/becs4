@@ -9,9 +9,8 @@ classdef optimizer
         beta1 % Moving avarage parameter of m
         beta2 % Moving avarage parameter of v
         t % Number of steps taken
-
-        a0 %initial adagrad variable
         sumGradSqrt % the sum of gradients (k-1 and k) squared
+        Sdw % adadelta variable
     end
     
     methods
@@ -35,9 +34,14 @@ classdef optimizer
                 % Initialize settings for the Adagrad optimizer
                 obj.opt = 'Adagrad';
                 obj.lr = lr;
-                obj.a0 = MLP(mlp.size_hl1, mlp.size_hl2)*0;
                 obj.sumGradSqrt = MLP(mlp.size_hl1, mlp.size_hl2)*0;
                 obj.beta1 = 0.9;
+
+            elseif strcmp(opt, 'Adadelta')
+                obj.opt = 'Adadelta';
+                obj.lr = lr;
+                obj.sumGradSqrt = MLP(mlp.size_hl1, mlp.size_hl2)*0;
+                obj.beta1 = 0.95; % typical values are 0.9 or 0.95
             
             end
         end
@@ -73,6 +77,15 @@ classdef optimizer
                 gradient = nn.grad;
 
                 nn.mlp = nn.mlp - obj.lr * gradient / ((obj.sumGradSqrt + epsilon)^0.5); 
+
+            elseif strcmp(obj.opt, 'Adadelta')
+                epsilon = 10^-8;
+
+                gradient = nn.grad;
+                
+                obj.sumGradSqrt = obj.beta1*obj.sumGradSqrt + (1-obj.beta1)*(nn.grad^2);
+
+                nn.mlp = nn.mlp - obj.lr *gradient / ((obj.sumGradSqrt + epsilon)^0.5);
                 
 
             end
