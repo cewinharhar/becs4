@@ -56,7 +56,8 @@ classdef genAlg
             end
             obj.fitness = fitness;
 
-            %get the 3 
+            %get the 3 top performer
+            
 
         end
 

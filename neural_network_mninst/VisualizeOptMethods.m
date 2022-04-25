@@ -52,6 +52,9 @@ test_images = test_images';
 size_hl1 = 128; % Number of neurons in the first hidden layer
 size_hl2 = 64; % Number of neurons in the second hidden layer
 
+%set learning rate
+lr = 0.001;
+
 %create container (dictionair equivalent) to store models
 nnAdam = NN(size_hl1, size_hl2, 'Adam', lr);
 nnAda = NN(size_hl1, size_hl2, 'Adagrad', lr);
@@ -175,6 +178,19 @@ end
 
 legend show
 hold off
+
+%% try genetic algorithm
+
+% generate 10 models with adam as optimizer
+
+models = [];
+for i = 1:10
+    nnMod = NN(size_hl1, size_hl2, 'Adam', lr);
+    models = [models, nnMod];
+end
+
+%%
+a = genAlg([nnAdam, nnAda], test_data, test_images, test_labels, 0.1);
 
 
 
