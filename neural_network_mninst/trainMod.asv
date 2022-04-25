@@ -1,0 +1,12 @@
+%% trainMod
+
+function mods = trainMod(size_hl1, size_hl2, optimizer, lr, nrOfModels)
+
+    modelArray = [];
+
+    
+    %create container (dictionair equivalent) to store models
+    nnAdam = NN(size_hl1, size_hl2, optimizer, lr);
+
+
+end
