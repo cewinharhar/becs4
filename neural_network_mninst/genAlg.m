@@ -19,7 +19,6 @@ classdef genAlg
 
     methods
 
-
         function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
@@ -57,7 +56,7 @@ classdef genAlg
             obj.fitness = fitness;
 
             %get the 3 top performer
-            
+
 
         end
 
