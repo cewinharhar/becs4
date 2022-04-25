@@ -2,7 +2,7 @@
 %we dont need random is the genetic algorithm is used   
 %rng(0); % seed for the random number generator
 %%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
-cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
+%cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 
 
 %% training data
