@@ -5,7 +5,8 @@ function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_
     modelArray = [];
 
     for modelIter = 1:nrOfModels
-        
+        disp("training model:")
+        disp(modelIter)
         %init model
         model = NN(size_hl1, size_hl2, optimizer, lr);
          %train the model
@@ -29,3 +30,15 @@ function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_
     end
 
 end
+
+%%
+
+
+f = waitbar(0, 'Starting');
+n = 100;
+for i= 1:n
+    disp("duh")
+    waitbar(i/n, f, sprintf('Progress: %d %%', floor(i/n*100)));
+    pause(0.1);
+end
+close(f)
