@@ -10,7 +10,6 @@ classdef optimizer
         beta2 % Moving avarage parameter of v
         t % Number of steps taken
         sumGradSqrt % the sum of gradients (k-1 and k) squared
-        Sdw % adadelta variable
     end
     
     methods

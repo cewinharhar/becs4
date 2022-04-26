@@ -14,6 +14,16 @@ classdef genAlg
         optim
         %error
         error4
+        %sorted fitness values
+        sorted_fitness
+        %index of original fitness to index into nnMatrix to get best
+        %performers
+        index
+        % an array of models
+        nnMatrix
+        parent1
+        % new population
+        new_population
         
     end
 
@@ -23,6 +33,7 @@ classdef genAlg
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
             % ydim = number of hyperparameters arrays: (W, b)x layers
+            obj.nnMatrix = nnMatrix;
 
             %set counter
             counter = 0;
@@ -57,17 +68,54 @@ classdef genAlg
             end
             obj.fitness = fitness;
 
-            %get the 3 top performer
-
             % use sort approach to get the sorted fitness list as well as
-
+            [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
+            
+                        %obj.new_population
             % choose top 3 models
-            [values, index] = sort(obj.fitness)
-            
-            %flatten and extr
+            model_1 = obj.nnMatrix(obj.index(1));
+            model_2 = obj.nnMatrix(obj.index(2));
+            model_3 = obj.nnMatrix(obj.index(3));
+
+            % Get the weights and biases of each model, flatten and store
+            % for cross over section flatten and extr
             %reshape(model.',1, [])
+
+            % Model 1
+            M1W1 = reshape(model_1.grad.W1.',1, []);
+            M1W2 = reshape(model_1.grad.W2.',1, []);
+            M1W3 = reshape(model_1.grad.W3.',1, []);
+
+            M1b1 = model_1.grad.b1;
+            M1b2 = model_1.grad.b2;
+            M1b3 = model_1.grad.b3;
+
+            obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
             
+            % Model 2
+            M2W1 = reshape(model_2.grad.W1.',1, []);
+            M2W2 = reshape(model_2.grad.W2.',1, []);
+            M2W3 = reshape(model_2.grad.W3.',1, []);
+
+            M2b1 = model_2.grad.b1;
+            M2b2 = model_2.grad.b2;
+            M2b3 = model_2.grad.b3;
+            
+            parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
+            % Model 3
+            M3W1 = reshape(model_3.grad.W1.',1, []);
+            M3W2 = reshape(model_3.grad.W2.',1, []);
+            M3W3 = reshape(model_3.grad.W3.',1, []);
+
+            M3b1 = model_3.grad.b1;
+            M3b2 = model_3.grad.b2;
+            M3b3 = model_3.grad.b3;
+
+            parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
             % do cross over and create 7 more children
+            
+
+
 
             % mutate all of them depending on the mutation rate
             % generate random number between -1 and 1 then divide by 100 or
@@ -76,9 +124,59 @@ classdef genAlg
             % generations of 100
 
         end
-
-
-
     end
+% methods(Static)
+%         function obj = newPopulation()
+%             %obj.new_population
+%             % choose top 3 models
+%             model_1 = obj.nnMatrix(obj.index(1));
+%             model_2 = obj.nnMatrix(obj.index(2));
+%             model_3 = obj.nnMatrix(obj.index(3));
+% 
+%             % Get the weights and biases of each model, flatten and store
+%             % for cross over section flatten and extr
+%             %reshape(model.',1, [])
+% 
+%             % Model 1
+%             M1W1 = reshape(model_1.grad.W1.',1, []);
+%             M1W2 = reshape(model_1.grad.W2.',1, []);
+%             M1W3 = reshape(model_1.grad.W3.',1, []);
+% 
+%             M1b1 = model_1.grad.b1;
+%             M1b2 = model_1.grad.b2;
+%             M1b3 = model_1.grad.b3;
+% 
+%             obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
+%             
+%             % Model 2
+%             M2W1 = reshape(model_2.grad.W1.',1, []);
+%             M2W2 = reshape(model_2.grad.W2.',1, []);
+%             M2W3 = reshape(model_2.grad.W3.',1, []);
+% 
+%             M2b1 = model_2.grad.b1;
+%             M2b2 = model_2.grad.b2;
+%             M2b3 = model_2.grad.b3;
+%             
+%             parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
+%             % Model 3
+%             M3W1 = reshape(model_3.grad.W1.',1, []);
+%             M3W2 = reshape(model_3.grad.W2.',1, []);
+%             M3W3 = reshape(model_3.grad.W3.',1, []);
+% 
+%             M3b1 = model_3.grad.b1;
+%             M3b2 = model_3.grad.b2;
+%             M3b3 = model_3.grad.b3;
+% 
+%             parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
+%             % do cross over and create 7 more children
+% 
+%             for i=1:7
+% 
+% 
+%             end
+% 
+%         end
+%         
+%     end
     
  end
