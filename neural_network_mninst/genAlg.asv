@@ -64,8 +64,7 @@ classdef genAlg
             % do cross over and create 7 more children
 
             % mutate all of them depending on the mutation rate
-            % generate random number between -1 and 1 then divide by 100 or
-            % 1000
+
             % repeat generation process unitl reaches 95% or max
             % generations of 100
 
