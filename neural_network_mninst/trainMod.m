@@ -31,6 +31,7 @@ function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_
         close(f)
         %append models to model array
         modelArray = [modelArray, model];
+        
 
     end
 

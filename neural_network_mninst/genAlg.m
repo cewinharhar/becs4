@@ -1,5 +1,13 @@
 %% Genetic algorithm
-
+% I wonder if I can just average the top 3 models to produce one child? or
+% average them together with different weights? In the MLP file functions
+% were defined to do that.
+% to make the children, I can generate a random indexing into each weight
+% or bias. I'll take the first half of those and index into a parent and
+% give it to the child then take the latter half and index into the second
+% parent and place it into the child. Then do the same for the rest!! I
+% think this will work and then we don't need to flatten it (at 
+% least I don't think I will)
 classdef genAlg
     % Neural Network object for training
     
