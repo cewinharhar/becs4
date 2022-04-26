@@ -32,6 +32,8 @@ classdef genAlg
 
             %estimate fitness of each model
             %iterate over models
+            % ------> Change fitness evaluation so it can be called in the
+            % class itself (new method)
             for model = nnMatrix            
 
                 counter = counter +1;
@@ -58,9 +60,13 @@ classdef genAlg
             %get the 3 top performer
 
             % use sort approach to get the sorted fitness list as well as
-            % the model numbers 
-            [values, index] = sort(obj.fitness)
 
+            % choose top 3 models
+            [values, index] = sort(obj.fitness)
+            
+            %flatten and extr
+            %reshape(model.',1, [])
+            
             % do cross over and create 7 more children
 
             % mutate all of them depending on the mutation rate
