@@ -146,7 +146,7 @@ for nn = [nnAdam, nnAda]
         end
         
         acc = [acc, hits/n*100];
-        err = [err, nn.error4];
+        err = [err, nn.crossEnt];
 
         fprintf('Accuracy: ');
         fprintf('%f',hits/n*100);
@@ -182,6 +182,12 @@ hold off
 
 %%
 a = genAlg([nnAdam, nnAda], test_data, test_images, test_labels, 0.1);
+
+%%
+y = (1:10);
+yh = softmax(2:11));
+
+disp(crossentropy(y, yh))
 
 
 

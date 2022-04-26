@@ -12,6 +12,8 @@ classdef NN
         optim
         %error
         error4
+        %cross entropy
+        crossEnt
         
     end
     methods
@@ -57,6 +59,7 @@ classdef NN
             
             %add error 
             obj.error4 = mean(error4 .^2);
+            obj.crossEnt = crossentropy(y, a4);
 
             obj.m = obj.m + 1; % Count number of samples in batch
         end
@@ -70,8 +73,9 @@ classdef NN
             
             % Reset gradients counter
             obj.m = 0;
+            
             % reset gradient
-            obj.grad = obj.grad*0;
+            %obj.grad = obj.grad*0;
         end
         
         function score = predict(obj, input)
