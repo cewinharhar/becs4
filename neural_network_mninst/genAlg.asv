@@ -54,10 +54,13 @@ classdef genAlg
             fitness = zeros(length(nnMatrix), 1 );
             
             %init evolution sandbox
-            sample   = zeros(10, 6);
-            rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7',};
-            colNames = {'w1','w2','w3','b1','b2','b3'};
-            obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
+            sample = rand(3,3);
+            rowNames = {'a','b','c'};
+            colNames = {'x','y','z'};
+            sTable = array2table(sample,'RowNames',rowNames,'VariableNames',colNames)
+
+
+            obj.evoSandBox = zeros(10, 6);
 
             %estimate fitness of each model
             %iterate over models
@@ -108,10 +111,10 @@ classdef genAlg
             M1b3 = model_1.grad.b3;
             
 
-            obj.evoSandBox(1,:) = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
+            parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
 
             %just in case we need the best initial model at some point
-            %obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
+            obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
             
             % Model 2
             M2W1 = reshape(model_2.grad.W1.',1, []);
@@ -122,7 +125,7 @@ classdef genAlg
             M2b2 = model_2.grad.b2;
             M2b3 = model_2.grad.b3;
             
-            obj.evoSandBox(2,:) = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
+            parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
 
             % Model 3
             M3W1 = reshape(model_3.grad.W1.',1, []);
@@ -133,8 +136,7 @@ classdef genAlg
             M3b2 = model_3.grad.b2;
             M3b3 = model_3.grad.b3;
 
-            obj.evoSandBox(3,:) = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
-            
+            parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
             % do cross over and create 7 more children
             
 
