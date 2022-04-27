@@ -16,6 +16,8 @@ classdef genModel
         b1
         b2
         b3
+
+        
     end
 
     methods
@@ -40,9 +42,10 @@ classdef genModel
             % Feed forward
             z2 = obj.W1*input + obj.b1;
             a2 = ReLU(z2, 'forward');
-            z3 = obj.W2*a2 + obj.b2;
+            z3 = obj.W2*a2 + obj.b2';
             a3 = ReLU(z3, 'forward');
-            z4 = obj.W3*a3 + obj.b3;
+            z4 = obj.W3*a3;
+            z4 = z4 + obj.b3;
             score = sigmoid(z4); % Output vector of prediction scores
         end
     end

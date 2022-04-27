@@ -38,6 +38,8 @@ classdef genAlg
         parent1
         parent2
         parent3
+        newbias3
+        genCount
         
     end
 
@@ -45,6 +47,7 @@ classdef genAlg
 
         function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, generations)
             obj.nnMatrix = nnMatrix;
+            obj.genCount = 0;
             for iterations = 1:generations
                 %function to optimize the weights of h1 and h2
                 % the nnMatrix is a matrix with xdim = number of models and
@@ -68,7 +71,7 @@ classdef genAlg
                     %calculate accuracy
                     hits = 0;
                     n = length(test_data);
-                    for i = 1:n
+                    for i = 1:3 %make this n later
                 
                         out = model.predict(test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score
@@ -258,6 +261,7 @@ classdef genAlg
                     newbias3(1:elements1) = obj.parent1{6}(indexb3(1:elements1));
                     newbias3(elements1:elements2) = obj.parent2{6}(indexb3(elements1:elements2));
                     newbias3(elements2:elements3) = obj.parent3{6}(indexb3(elements2:elements3));
+                    obj.newbias3 = newbias3;
     
                     % now need to reshape and create new NN object and add to a
                     % new matrix. First need to reshape into same dimensions
@@ -266,6 +270,7 @@ classdef genAlg
                     newweight2 = reshape(newweight2, [64, 128]);
                     newweight3 = reshape(newweight3, [10, 64]);
                     % biases don't need to be reshaped.
+                    
     
                     % get the new MLP and add it to the new population
                    
@@ -273,6 +278,8 @@ classdef genAlg
                     obj.new_population = [obj.new_population, child];
                 end
                 obj.nnMatrix = obj.new_population;
+                obj.genCount = obj.genCount +1;
+                
     
     
     
