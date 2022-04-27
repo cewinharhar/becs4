@@ -196,12 +196,12 @@ classdef genAlg
                 %transfer hyperparameters back to models
                 for updateModel = 1:length(obj.nnMatrix)
                 
-                    obj.nnMatrix(updateModel).mlp.W1 = reshape(obj.evoSandBox(updateModel,1), [128, 784]);
-                    obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox(updateModel,2), [64, 128]);
-                    obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox(updateModel,3), [10, 64]);
-                    obj.nnMatrix(updateModel).mlp.b1 = obj.evoSandBox(updateModel,4)';
-                    obj.nnMatrix(updateModel).mlp.b2 = obj.evoSandBox(updateModel,5)';
-                    obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox(updateModel,6)';
+                    obj.nnMatrix(updateModel).mlp.W1 = reshape(obj.evoSandBox{updateModel,1}, [128, 784]);
+                    obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox{updateModel,2}, [64, 128]);
+                    obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox{updateModel,3}, [10, 64]);
+                    obj.nnMatrix(updateModel).mlp.b1 = obj.evoSandBox{updateModel,4}';
+                    obj.nnMatrix(updateModel).mlp.b2 = obj.evoSandBox{updateModel,5}';
+                    obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox{updateModel,6}';
                 end
 
                 genAlgRecursive(obj)
