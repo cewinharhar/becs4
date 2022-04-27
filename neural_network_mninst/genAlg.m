@@ -107,8 +107,8 @@ classdef genAlg
                     %calculate accuracy
                     hits = 0;
                     n = length(obj.test_data);
-                    disp("length n")
-                    disp(n)
+                    %disp("length n")
+                    %disp(n)
                     for i = 1:n                
                         out = model.predict(obj.test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score                
