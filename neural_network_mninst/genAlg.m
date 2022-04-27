@@ -39,6 +39,7 @@ classdef genAlg
         parent3
         newweight1
         new_population
+        child
     end
 
     methods
@@ -133,6 +134,7 @@ classdef genAlg
             M3b3 = obj.model_3.grad.b3;
 
             obj.parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
+            
             % do cross over and create 7 more children
             
 
@@ -190,7 +192,7 @@ classdef genAlg
                 elements1 = round(length(indexb3)*0.33);
                 elements2 = round(length(indexb3)*0.667);
                 elements3 = length(indexb3);
-                newbias3 = zeros(1,length(obj.parent1{4}));
+                newbias3 = zeros(1,length(obj.parent1{6}));
                 newbias3(1:elements1) = obj.parent1{6}(indexb3(1:elements1));
                 newbias3(elements1:elements2) = obj.parent2{6}(indexb3(elements1:elements2));
                 newbias3(elements2:elements3) = obj.parent3{6}(indexb3(elements2:elements3));
@@ -205,8 +207,9 @@ classdef genAlg
 
                 % get the new MLP and add it to the new population
                
-                child = genModel(128, 64, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
-                obj.new_population = [obj.new_population, child];
+                obj.child = genModel(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
+%                 child.GA_MLP(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
+%                 obj.new_population = [obj.new_population, child];
 %             end
 
 
