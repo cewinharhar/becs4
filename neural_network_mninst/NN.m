@@ -90,6 +90,10 @@ classdef NN
         
         function score = predict(obj, input)
             % Feed forward
+            disp("inside NN")
+            disp(size(obj.mlp.W1))
+            disp(size(input))
+            disp(size(obj.mlp.b1))
             z2 = obj.mlp.W1*input + obj.mlp.b1;
             a2 = ReLU(z2, 'forward');
             z3 = obj.mlp.W2*a2 + obj.mlp.b2;

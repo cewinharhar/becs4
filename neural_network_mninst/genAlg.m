@@ -51,7 +51,7 @@ classdef genAlg
 
     methods
 
-        function obj = load(nnMatrix, test_data, test_images, test_labels,  mutRate, crossOverRate)
+        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, crossOverRate)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
             % ydim is the number of hyperparameters arrays: (W, b)x layers            
@@ -85,28 +85,30 @@ classdef genAlg
 
             obj.generationCounter = 0;
 
-            obj = genAlg();
+            obj = genAlgRecursive(obj);
 
         end
 
          %recursive genetic algorithm function
-        function obj = genAlg()
+        function obj = genAlgRecursive(obj)
             %exit statement
             while obj.generationCounter < 10
                 obj.generationCounter = obj.generationCounter + 1;
-
+                disp("generation")
+                disp(obj.generationCounter)
+                disp("-----------------")
                 %------
                 % Fitness evaluation
                 %iterate over models
-
                 modelCounter = 0;
-                for model = nnMatrix            
-    
+                for model = obj.nnMatrix            
                     modelCounter = modelCounter +1;
     
                     %calculate accuracy
                     hits = 0;
                     n = length(obj.test_data);
+                    disp("length n")
+                    disp(n)
                     for i = 1:n                
                         out = model.predict(obj.test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score                
@@ -151,7 +153,7 @@ classdef genAlg
                     Mb2 = initParent.mlp.b2';
                     Mb3 = initParent.mlp.b3';              
     
-                    obj.evoSandBox(parent,:) = {MW1; MW2; MW3; Mb1; Mb2; Mb3};
+                    obj.evoSandBox(parent,:) = {MW1, MW2, MW3, Mb1, Mb2, Mb3};
                 end
     
                 %-----
@@ -174,14 +176,14 @@ classdef genAlg
                         %-----
                         %mutation
                         chromosomLength = length(obj.evoSandBox{child, hyperparameter});
-                        mutationSites = rand([1,chromosomLength], round(obj.mutationRate * chromosomLength));
+                        mutationSites   = randi([1,chromosomLength], round(obj.mutRate * chromosomLength));
     
                         for pointMutation = mutationSites
                             %differentiate between weights and bias mutation
                             if hyperparameter < 4 %only weights
-                                mutant = rand([-0.01, 0.01], 1);
+                                mutant = randi([-200, 200], 1) / 10000;
                             else                  %only biases
-                                mutant = rand([-0.04, 0.04], 1);
+                                mutant = randi([-400, 400], 1) / 10000;
                             end
                             obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
                         end
