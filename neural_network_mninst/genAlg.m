@@ -162,17 +162,19 @@ classdef genAlg
 
                 for hyperparameter = 1:width(obj.evoSandBox)
                     for child = 4:10
-                        % Evolution or not?
-                        %if obj.crossOverRate >= rand()
-                           %if not go to next column
-                        %   continue
-                        %end                   
+              
                     
                         %-----
                         % cross over
                         wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
                         obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
-                                 
+
+                        % Evolution or not?
+                        %if obj.crossOverRate >= rand()
+                           %if not go to next column
+                        %   continue
+                        %end 
+
                         %-----
                         %mutation
                         chromosomLength = length(obj.evoSandBox{child, hyperparameter});
@@ -195,14 +197,14 @@ classdef genAlg
                 for updateModel = 1:length(obj.nnMatrix)
                 
                     obj.nnMatrix(updateModel).mlp.W1 = reshape(obj.evoSandBox(updateModel,1), [128, 784]);
-                    obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox(updateModel,2), [128, 784]);
-                    obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox(updateModel,3), [128, 784]);
+                    obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox(updateModel,2), [64, 128]);
+                    obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox(updateModel,3), [10, 64]);
                     obj.nnMatrix(updateModel).mlp.b1 = obj.evoSandBox(updateModel,4)';
                     obj.nnMatrix(updateModel).mlp.b2 = obj.evoSandBox(updateModel,5)';
                     obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox(updateModel,6)';
                 end
 
-                genAlg()
+                genAlgRecursive(obj)
 
             end   
 
