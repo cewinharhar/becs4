@@ -7,7 +7,7 @@
 % give it to the child then take the latter half and index into the second
 % parent and place it into the child. Then do the same for the rest!! I
 % think this will work and then we don't need to flatten it (at 
-% least I don't think I will)
+% least I don't think I will) hi
 classdef genAlg
     % Neural Network object for training
     
@@ -91,11 +91,7 @@ classdef genAlg
             obj.model_2 = obj.nnMatrix(obj.index(2));
             obj.model_3 = obj.nnMatrix(obj.index(3));
 
-            obj.new_population = [];
-            obj.new_population = [obj.new_population, obj.model_1, obj.model_2, obj.model_3];
-            %obj.new_population = [obj.new_population, obj.model_2];
-            %obj.new_population = [obj.new_population, obj.model_3];
-
+            obj.new_population = [obj.model_1, obj.model_2, obj.model_3];
 
             % Get the weights and biases of each model, flatten and store
             % for cross over section flatten and extr
