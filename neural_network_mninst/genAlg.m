@@ -57,8 +57,8 @@ classdef genAlg
             % ydim is the number of hyperparameters arrays: (W, b)x layers            
             
             %initialize class
-            obj.nnMatrix = nnMatrix;
-            obj.test_data = test_data;
+            obj.nnMatrix    = nnMatrix;
+            obj.test_data   = test_data;
             obj.test_images = test_images;
             obj.test_labels = test_labels;
             %both evolution paramters must be between 0 and 1
@@ -66,7 +66,6 @@ classdef genAlg
             obj.mutRate = mutRate;
             % 0.2 - 0.3
             obj.crossOverRate = crossOverRate;
-
 
             %set fitness scores
             obj.fitness = zeros(length(nnMatrix), 1 );
@@ -85,12 +84,13 @@ classdef genAlg
             end      
 
             obj.generationCounter = 0;
-            genAlg()
+
+            obj = genAlg();
 
         end
 
          %recursive genetic algorithm function
-        function finalNN = genAlg(obj)
+        function obj = genAlg()
             %exit statement
             while obj.generationCounter < 10
                 obj.generationCounter = obj.generationCounter + 1;
@@ -121,17 +121,16 @@ classdef genAlg
                 end
                 
                 %-----
-                %exit call
-                %-----
-                if max(obj.fitness) < 95
-                    break
-                end
-
-                %-----
                 % Rank the models by accuracy
                 %-----
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
-                
+
+                %-----
+                %exit call
+                %-----
+                if max(obj.fitness) > 0.93
+                    break
+                end                
                 
                 %-----
                 % extract top 3 models and transfer information into
@@ -144,13 +143,13 @@ classdef genAlg
                 % Get the weights and biases of each model, flatten and store               
                 %-----
                                     
-                    MW1 = reshape(initParent.mlp.W1.',1, []);
-                    MW2 = reshape(initParent.mlp.W2.',1, []);
-                    MW3 = reshape(initParent.mlp.W3.',1, []);
+                    MW1 = initParent.mlp.W1(:)';
+                    MW2 = initParent.mlp.W2(:)';
+                    MW3 = initParent.mlp.W3(:)';
         
-                    Mb1 = initParent.mlp.b1;
-                    Mb2 = initParent.mlp.b2;
-                    Mb3 = initParent.mlp.b3;              
+                    Mb1 = initParent.mlp.b1';
+                    Mb2 = initParent.mlp.b2';
+                    Mb3 = initParent.mlp.b3';              
     
                     obj.evoSandBox(parent,:) = {MW1; MW2; MW3; Mb1; Mb2; Mb3};
                 end
@@ -191,99 +190,38 @@ classdef genAlg
 
                 %-----
                 %transfer hyperparameters back to models
-
+                for updateModel = 1:length(obj.nnMatrix)
                 
-                    indexW1 = randperm(length(obj.parent1{1})); % create random index
-                    elements1 = round(length(indexW1)*0.33); %index using first 33%
-                    elements2 = round(length(indexW1)*0.667); %index using second 33%
-                    elements3 = length(indexW1); % last 33%
-                    newweight1 = zeros(1,length(obj.parent1{1})); % create a new matrix
-                    newweight1(1:elements1) = obj.parent1{1}(indexW1(1:elements1)); % radomly selecting weights from parent1
-                    newweight1(elements1:elements2) = obj.parent2{1}(indexW1(elements1:elements2)); % from parent 2
-                    newweight1(elements2:elements3) = obj.parent3{1}(indexW1(elements2:elements3)); % from parent 3
-                    
-                    
-    
-                    indexW2 = randperm(length(obj.parent1{2}));
-                    elements1 = round(length(indexW2)*0.33);
-                    elements2 = round(length(indexW2)*0.667);
-                    elements3 = length(indexW2);
-                    newweight2 = zeros(1,length(obj.parent1{2}));
-                    newweight2(1:elements1) = obj.parent1{2}(indexW2(1:elements1));
-                    newweight2(elements1:elements2) = obj.parent2{2}(indexW2(elements1:elements2));
-                    newweight2(elements2:elements3) = obj.parent3{2}(indexW2(elements2:elements3));
-    
-                    indexW3 = randperm(length(obj.parent1{3}));
-                    elements1 = round(length(indexW3)*0.33);
-                    elements2 = round(length(indexW3)*0.667);
-                    elements3 = length(indexW3);
-                    newweight3 = zeros(1,length(obj.parent1{3}));
-                    newweight3(1:elements1) = obj.parent1{3}(indexW3(1:elements1));
-                    newweight3(elements1:elements2) = obj.parent2{3}(indexW3(elements1:elements2));
-                    newweight3(elements2:elements3) = obj.parent3{3}(indexW3(elements2:elements3));
-                    
-    
-                    indexb1 = randperm(length(obj.parent1{4}));
-                    elements1 = round(length(indexb1)*0.33);
-                    elements2 = round(length(indexb1)*0.667);
-                    elements3 = length(indexb1);
-                    newbias1 = zeros(1,length(obj.parent1{4}));
-                    newbias1(1:elements1) = obj.parent1{4}(indexb1(1:elements1));
-                    newbias1(elements1:elements2) = obj.parent2{4}(indexb1(elements1:elements2));
-                    newbias1(elements2:elements3) = obj.parent3{4}(indexb1(elements2:elements3));
-    
-                    indexb2 = randperm(length(obj.parent1{5}));
-                    elements1 = round(length(indexb2)*0.33);
-                    elements2 = round(length(indexb2)*0.667);
-                    elements3 = length(indexb2);
-                    newbias2 = zeros(1,length(obj.parent1{5}));
-                    newbias2(1:elements1) = obj.parent1{5}(indexb2(1:elements1));
-                    newbias2(elements1:elements2) = obj.parent2{5}(indexb2(elements1:elements2));
-                    newbias2(elements2:elements3) = obj.parent3{5}(indexb2(elements2:elements3));
-    
-                    indexb3 = randperm(length(obj.parent1{6}));
-                    elements1 = round(length(indexb3)*0.33);
-                    elements2 = round(length(indexb3)*0.667);
-                    elements3 = length(indexb3);
-                    newbias3 = zeros(1,length(obj.parent1{4}));
-                    newbias3(1:elements1) = obj.parent1{6}(indexb3(1:elements1));
-                    newbias3(elements1:elements2) = obj.parent2{6}(indexb3(elements1:elements2));
-                    newbias3(elements2:elements3) = obj.parent3{6}(indexb3(elements2:elements3));
-    
-                    % now need to reshape and create new NN object and add to a
-                    % new matrix. First need to reshape into same dimensions
-                    % required for weights
-                    newweight1 = reshape(newweight1, [128, 784]);
-                    newweight2 = reshape(newweight2, [64, 128]);
-                    newweight3 = reshape(newweight3, [10, 64]);
-                    % biases don't need to be reshaped.
-   
+                    obj.nnMatrix(updateModel).mlp.W1 = reshape(obj.evoSandBox(updateModel,1), [128, 784]);
+                    obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox(updateModel,2), [128, 784]);
+                    obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox(updateModel,3), [128, 784]);
+                    obj.nnMatrix(updateModel).mlp.b1 = obj.evoSandBox(updateModel,4)';
+                    obj.nnMatrix(updateModel).mlp.b2 = obj.evoSandBox(updateModel,5)';
+                    obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox(updateModel,6)';
+                end
 
-            end
+                genAlg()
 
-             % get the new MLP and add it to the new population
-            % newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
-            child = NN(128, 64, "Adam", 0.001);
-            child = child.newNN(128, 64, "Adam",  0.001, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
-            obj.new_population = [obj.new_population, child];
-%             end
+            end   
+
         end
     end
-
-%%
-rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
-con = containers.Map();
-for o = rowNames
-    con(o) = rand();
 end
 
-%%
-c = {};
-for i = 1:10
-    for o = 1:6
-      c{i,o} = [1:10];
-    end
-end
+
+%rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
+%con = containers.Map();
+%for o = rowNames
+%    con(o) = rand();
+%end
+
+
+%c = {};
+%for i = 1:10
+%    for o = 1:6
+%      c{i,o} = [1:10];
+%    end
+%end
 
 
 
