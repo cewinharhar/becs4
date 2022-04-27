@@ -92,9 +92,9 @@ classdef genAlg
             obj.model_3 = obj.nnMatrix(obj.index(3));
 
             obj.new_population = [];
-            obj.new_population = [obj.new_population, obj.model_1];
-            obj.new_population = [obj.new_population, obj.model_2];
-            obj.new_population = [obj.new_population, obj.model_3];
+            obj.new_population = [obj.new_population, obj.model_1, obj.model_2, obj.model_3];
+            %obj.new_population = [obj.new_population, obj.model_2];
+            %obj.new_population = [obj.new_population, obj.model_3];
 
 
             % Get the weights and biases of each model, flatten and store
