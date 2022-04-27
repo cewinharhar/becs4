@@ -29,7 +29,13 @@ classdef genAlg
         index
         % an array of models
         nnMatrix
-
+        %
+        generationCounter
+        test_data
+        test_images
+        test_labels
+        mutRate
+        crossOverRate
         %sandbox
         evoSandBox
         % new population        
@@ -45,43 +51,66 @@ classdef genAlg
 
     methods
 
-        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate)
+        function obj = load(nnMatrix, test_data, test_images, test_labels,  mutRate, crossOverRate)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
             % ydim is the number of hyperparameters arrays: (W, b)x layers            
             
+            %initialize class
             obj.nnMatrix = nnMatrix;
+            obj.test_data = test_data;
+            obj.test_images = test_images;
+            obj.test_labels = test_labels;
+            %both evolution paramters must be between 0 and 1
+            % 0.05-0.1
+            obj.mutRate = mutRate;
+            % 0.2 - 0.3
+            obj.crossOverRate = crossOverRate;
 
-            %set counter
-            modelCounter = 0;
 
             %set fitness scores
             obj.fitness = zeros(length(nnMatrix), 1 );
 
             %set evolution sandbox
-            sample   = zeros(10, 6);
-            rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
-            colNames = {'w1','w2','w3','b1', 'b2', 'b3'}; 
-            obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
-            
-            generationCounter = 0;
-            
-            while max(obj.fitness) < 95 || generationCounter < 10
-                %estimate fitness of each model
+            %sample   = zeros(10, 6);
+            %rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
+            %colNames = {'w1','w2','w3','b1', 'b2', 'b3'};          
+            %obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
+            %use cell arrays for this (like lists)
+            obj.evoSandBox = {};
+            for rows = 1:10
+                for cols = 1:6
+                  obj.evoSandBox{rows,cols} = 1:10;
+                end
+            end      
+
+            obj.generationCounter = 0;
+            genAlg()
+
+        end
+
+         %recursive genetic algorithm function
+        function finalNN = genAlg(obj)
+            %exit statement
+            while obj.generationCounter < 10
+                obj.generationCounter = obj.generationCounter + 1;
+
+                %------
+                % Fitness evaluation
                 %iterate over models
-                % ------> Change fitness evaluation so it can be called in the
-                % class itself (new method)
+
+                modelCounter = 0;
                 for model = nnMatrix            
     
                     modelCounter = modelCounter +1;
     
                     %calculate accuracy
                     hits = 0;
-                    n = length(test_data);
+                    n = length(obj.test_data);
                     for i = 1:n                
-                        out = model.predict(test_images(:,i)); % model prediction vector
+                        out = model.predict(obj.test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score                
-                        if test_labels(i) == (num-1)
+                        if obj.test_labels(i) == (num-1)
                             hits = hits + 1; % Count the number of correct classifications
                         end       
                     end
@@ -90,27 +119,31 @@ classdef genAlg
                     obj.fitness(modelCounter) = accuracy;
                     
                 end
-    
-                % use sort approach to get the sorted fitness list as well as
+                
+                %-----
+                %exit call
+                %-----
+                if max(obj.fitness) < 95
+                    break
+                end
+
+                %-----
+                % Rank the models by accuracy
+                %-----
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
                 
-
                 
-                %%%%%%%
+                %-----
                 % extract top 3 models and transfer information into
                 % sandbox
-                %%%%%%%
-                
+                %-----                
                 for parent = 1:3
-
                     initParent = obj.nnMatrix(obj.index(parent));
     
-                %%%%%%%%%%%%%%%%%%%%%%
-                % Get the weights and biases of each model, flatten and store
-                % for cross over section flatten and extr
-                %%%%%%%%%%%%%%%%%%%%%                
-                
-                    
+                %-----
+                % Get the weights and biases of each model, flatten and store               
+                %-----
+                                    
                     MW1 = reshape(initParent.mlp.W1.',1, []);
                     MW2 = reshape(initParent.mlp.W2.',1, []);
                     MW3 = reshape(initParent.mlp.W3.',1, []);
@@ -122,11 +155,44 @@ classdef genAlg
                     obj.evoSandBox(parent,:) = {MW1; MW2; MW3; Mb1; Mb2; Mb3};
                 end
     
-                % do cross over and create 7 more children
-                
-    
-    %             for i=1:7
+                %-----
+                % Evolution process
+                %-----               
+
+                for hyperparameter = 1:width(obj.evoSandBox)
+                    for child = 4:10
+                        % Evolution or not?
+                        %if obj.crossOverRate >= rand()
+                           %if not go to next column
+                        %   continue
+                        %end                   
                     
+                        %-----
+                        % cross over
+                        wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
+                        obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
+                                 
+                        %-----
+                        %mutation
+                        chromosomLength = length(obj.evoSandBox{child, hyperparameter});
+                        mutationSites = rand([1,chromosomLength], round(obj.mutationRate * chromosomLength));
+    
+                        for pointMutation = mutationSites
+                            %differentiate between weights and bias mutation
+                            if hyperparameter < 4 %only weights
+                                mutant = rand([-0.01, 0.01], 1);
+                            else                  %only biases
+                                mutant = rand([-0.04, 0.04], 1);
+                            end
+                            obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
+                        end
+                    end
+                end
+
+                %-----
+                %transfer hyperparameters back to models
+
+                
                     indexW1 = randperm(length(obj.parent1{1})); % create random index
                     elements1 = round(length(indexW1)*0.33); %index using first 33%
                     elements2 = round(length(indexW1)*0.667); %index using second 33%
@@ -191,23 +257,34 @@ classdef genAlg
                     newweight2 = reshape(newweight2, [64, 128]);
                     newweight3 = reshape(newweight3, [10, 64]);
                     % biases don't need to be reshaped.
-    
-                    % get the new MLP and add it to the new population
-                    % newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
-                    child = NN(128, 64, "Adam", 0.001);
-                    child = child.newNN(128, 64, "Adam",  0.001, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
-                    obj.new_population = [obj.new_population, child];
-    %             end
-
-
-
-            % mutate all of them depending on the mutation rate
-            % generate random number between -1 and 1 then divide by 100 or
-            % 1000
-            % repeat generation process unitl reaches 95% or max
-            % generations of 100
+   
 
             end
+
+             % get the new MLP and add it to the new population
+            % newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
+            child = NN(128, 64, "Adam", 0.001);
+            child = child.newNN(128, 64, "Adam",  0.001, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
+            obj.new_population = [obj.new_population, child];
+%             end
         end
     end
+
+%%
+rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
+con = containers.Map();
+for o = rowNames
+    con(o) = rand();
+end
+
+%%
+c = {};
+for i = 1:10
+    for o = 1:6
+      c{i,o} = [1:10];
+    end
+end
+
+
+
 
