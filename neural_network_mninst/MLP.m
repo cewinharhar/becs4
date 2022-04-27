@@ -35,7 +35,7 @@ classdef MLP
         end
         
         % Creates a new MLP with weights from genetic algorthmn selection
-        function obj = GA_MLP(size_hl1, size_hl2,w1, w2, w3, b1, b2, b3)
+        function obj = GA_MLP(size_hl1, size_hl2, w1, w2, w3, b1, b2, b3)
             
             % Size of hiddenlayer 1&2
             obj.size_hl1 = size_hl1;

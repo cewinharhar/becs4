@@ -32,6 +32,16 @@ classdef NN
             obj.optim = optimizer(opt, lr, obj.mlp);
             
         end
+        function obj = newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
+
+            % new mlp model using weights from genetic alg
+            obj.mlp = GA_MLP(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3);
+            obj.grad = GA_MLP(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3);
+            obj.grad = obj.grad*0;
+            obj.optim = optimizer(opt, lr, obj.mlp);
+
+        end
+
        
         function obj = backpropagate(obj, a1, y)
             
