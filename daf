@@ -1,0 +1,281 @@
+[33mcommit 60b46e1da193b15a6a2c70b20ebd98bcbf9ca648[m[33m ([m[1;36mHEAD -> [m[1;32meric[m[33m, [m[1;31morigin/eric[m[33m)[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 19:09:26 2022 +0200
+
+    changed iteration amount over test data to 3 for testing
+
+[33mcommit 4f293ec3789a34e8359550f2a8f9f60ae893ec4c[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 17:12:33 2022 +0200
+
+    error regarding sizes of arrays in genModel predict method
+
+[33mcommit db9ab3148a6054f5c6fc0e71a1830ad27f68bb1d[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 16:20:31 2022 +0200
+
+    successfully got a new array of children from previous generation
+
+[33mcommit 4be32945c5cb93f7278e98609c74addd3bdd20ab[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 16:11:48 2022 +0200
+
+    weights from grad to mlp
+
+[33mcommit 38edda0b5bc519cebc0e6b344475f2416bddb857[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 15:48:35 2022 +0200
+
+    got the class to work with inputs
+
+[33mcommit 4c8d48d913262afd537b29e2b627c7009672d91d[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 15:32:00 2022 +0200
+
+    added class genModel to make new models with genetic weights and bias
+
+[33mcommit 3323a5c60346927be8525b7185ac0a5cd920de96[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 14:36:31 2022 +0200
+
+    bad implimentation of cross over
+
+[33mcommit 8d363ae013d57e6570472fb6637dc521e362bb50[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Apr 27 01:46:22 2022 +0200
+
+    commented some reminders for myself
+
+[33mcommit 0200d20cd0f0fc5a04f3add18da6db6a2ef66f24[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Tue Apr 26 23:50:34 2022 +0200
+
+    added method in MLP to make new MLP's; started with population generation
+
+[33mcommit a366853c0552cc491455e4fb1948b10927d045bc[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Tue Apr 26 20:01:14 2022 +0200
+
+    get rid of redundance
+
+[33mcommit a559bac4d9c2fbc18282fbb2b3ddafa48c973677[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Tue Apr 26 19:51:33 2022 +0200
+
+    get rid of redundance
+
+[33mcommit 875cc50bfbef0f070b43b8c2008c5c07a72f3ec1[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Tue Apr 26 18:46:03 2022 +0200
+
+    get rid of redundance
+
+[33mcommit f30263d3cebed60d1c06fe252f8102de6786e44c[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 21:14:19 2022 +0200
+
+    changes on lifescript
+
+[33mcommit a71e894cc6fad9616977256b6973519140da2d4f[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 21:01:09 2022 +0200
+
+    changes on lifescript
+
+[33mcommit 7c3d4a43fa5c2798656d6ffcdf9c9c10dfd87994[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 20:50:44 2022 +0200
+
+    changes on lifescript
+
+[33mcommit af539cdd8953c64398f2daf99ad2e8828c76f5c7[m
+Merge: 4ec18e1 6656e25
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 20:41:10 2022 +0200
+
+    Merge branch 'main' of https://github.com/cewinharhar/becs4
+
+[33mcommit 4ec18e194e9c7311f27e1d2de2f7d75d8633a0c8[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 20:41:05 2022 +0200
+
+    changes on lifescript
+
+[33mcommit 6656e25f7a12e4d3a06057e305f98c23c75b0167[m
+Merge: 140f724 6b40545
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Mon Apr 25 20:38:55 2022 +0200
+
+    Merge branch 'main' of https://github.com/cewinharhar/becs4
+
+[33mcommit 140f72474084b3c8e8b7ec37914cc5370742a773[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Mon Apr 25 20:38:46 2022 +0200
+
+    Added adadelta and removed a0 from optimizer file
+
+[33mcommit 6b405452dfb98dcf66eec18f81db388946b1a9a4[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 20:19:38 2022 +0200
+
+    starting with ga
+
+[33mcommit a19e0176a12c502c6065446785a3b5377ad9eed1[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Mon Apr 25 20:04:48 2022 +0200
+
+    starting with ga
+
+[33mcommit 2ff795e354ea9043b2915f4ef3c1278e6ee944ec[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 22:38:35 2022 +0200
+
+    good mlx
+
+[33mcommit 812cf7c0f38ad051f074dacc7481692783fbd92b[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 17:25:26 2022 +0200
+
+    good mlx
+
+[33mcommit d7808e4f76d0293b830828907318ae5b4e53f597[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 15:52:27 2022 +0200
+
+    good mlx
+
+[33mcommit 0c0ae766935d5d050b57c219af63ff5f8d280835[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 14:20:06 2022 +0200
+
+    good mlx
+
+[33mcommit 76527074a4fb8f639d4ecc9106a4dab663aac06e[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 14:19:15 2022 +0200
+
+    good mlx
+
+[33mcommit 3168a536b8f48a05d98af75f435040c45fc56f0a[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 14:14:18 2022 +0200
+
+    ch
+
+[33mcommit 05e85e4cb8a075a5ad2f2c32b4592a9fc6263e1c[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 14:02:03 2022 +0200
+
+    create a new script for the visualization of the different opt methods
+
+[33mcommit 974cb8bf0fbdf4d153a8640974e1647f23668a6b[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sun Apr 24 13:15:07 2022 +0200
+
+    create a new script for the visualization of the different opt methods
+
+[33mcommit ba6247cf91b7329bb4787753c9c1a83b94185a0b[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sat Apr 23 22:29:26 2022 +0200
+
+    changed input dat
+
+[33mcommit 95966df9b384c248f91d82b04429773c7e370b57[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sat Apr 23 17:20:05 2022 +0200
+
+    _
+
+[33mcommit 909f9cd6ce49061edc3d2448ac5a688be59a4678[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Sat Apr 16 13:31:46 2022 +0200
+
+    quick notes
+
+[33mcommit 5ebf8464cd60414c95dcb43ec0aab1c406e429a9[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Tue Apr 12 11:23:25 2022 +0200
+
+    Just added a link for optimising hyperparameters
+
+[33mcommit cb143fbb653457943c31021b6aac23470cb763b2[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Apr 6 14:15:04 2022 +0200
+
+    adagrad implementation
+
+[33mcommit 299718a3bfecd7c8f1805881e5b65a7494534fbf[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 20:40:49 2022 +0100
+
+    life script
+
+[33mcommit 48853acdd4e7e576ecf552403219603106ba51f1[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 20:09:23 2022 +0100
+
+    change of plans
+
+[33mcommit 9ffe33e7e6b5124c95244d9543b87be31f255cf6[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 18:40:59 2022 +0100
+
+    life script
+
+[33mcommit b765798bc5105cee18fa4ae31d84bcfee1c3bc55[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 18:25:41 2022 +0100
+
+    life script
+
+[33mcommit 041fa0247dbf8c14eab065d3a581e7f0a7743b2c[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 17:48:19 2022 +0100
+
+    life script
+
+[33mcommit 3c02eca92876e84ae9ff247b9d5f23da2b607220[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 17:27:32 2022 +0100
+
+    life script
+
+[33mcommit 5e11a5c5202de046470c83f1fa2940c7983ef996[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 17:03:08 2022 +0100
+
+    life script
+
+[33mcommit bb4ced65aeeef9275b02619258ae4aeb14be5624[m
+Author: cewinharhar <kevin.yar@outlook.com>
+Date:   Wed Mar 23 16:46:11 2022 +0100
+
+    life script
+
+[33mcommit 80e920d6455f93ffce79a1d566ca751e461744f9[m
+Author: afrodisac <70900221+afrodisac@users.noreply.github.com>
+Date:   Wed Mar 23 15:16:56 2022 +0100
+
+    Added labels and images (28 x 28 pixels)
+    
+    Obtained from this website: http://yann.lecun.com/exdb/mnist/
+    
+    Says there are 60 000 examples for training and a test set of 10 000
+
+[33mcommit b1669d3ae5b13e924e210745beb9a964b56f425e[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Mar 9 16:05:08 2022 +0100
+
+    made some chahnges
+
+[33mcommit 68b4db4cef9842bec8dfc691e301b438b1b7c610[m
+Author: afrodisiac <eric.gericke2@gmail.com>
+Date:   Wed Mar 9 16:02:33 2022 +0100
+
+    test file
+
+[33mcommit c7ff80b25289a76d7cd50ccefb3ba31bc53dc7cb[m
+Author: Kevin Yar <64527798+cewinharhar@users.noreply.github.com>
+Date:   Wed Mar 9 15:45:02 2022 +0100
+
+    Initial commit

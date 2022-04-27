@@ -262,13 +262,19 @@ classdef genAlg
                     newbias3(elements1:elements2) = obj.parent2{6}(indexb3(elements1:elements2));
                     newbias3(elements2:elements3) = obj.parent3{6}(indexb3(elements2:elements3));
                     obj.newbias3 = newbias3;
+                    disp(obj.newbias3)
     
                     % now need to reshape and create new NN object and add to a
                     % new matrix. First need to reshape into same dimensions
                     % required for weights
-                    newweight1 = reshape(newweight1, [128, 784]);
-                    newweight2 = reshape(newweight2, [64, 128]);
-                    newweight3 = reshape(newweight3, [10, 64]);
+%                     newweight1 = reshape(newweight1, [128, 784]);
+%                     newweight2 = reshape(newweight2, [64, 128]);
+%                     newweight3 = reshape(newweight3, [10, 64]);
+                      newweight1 = reshape(newweight1, [784, 128])';
+                      newweight2 = reshape(newweight2, [128, 64])';
+                      newweight3 = reshape(newweight3, [64, 10])';
+
+
                     % biases don't need to be reshaped.
                     
     
