@@ -48,7 +48,8 @@ classdef genAlg
         function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
-            % ydim is the number of hyperparameters arrays: (W, b)x layers            
+            % ydim is the number of hyperparameters arrays: (W, b)x layers
+            
             
             obj.nnMatrix = nnMatrix;
 
@@ -66,6 +67,7 @@ classdef genAlg
             
             generationCounter = 0;
             
+
             while max(obj.fitness) < 95 || generationCounter < 10
                 %estimate fitness of each model
                 %iterate over models
@@ -100,6 +102,7 @@ classdef genAlg
                 % extract top 3 models and transfer information into
                 % sandbox
                 %%%%%%%
+
                 
                 for parent = 1:3
 
@@ -115,12 +118,50 @@ classdef genAlg
                     MW2 = reshape(initParent.mlp.W2.',1, []);
                     MW3 = reshape(initParent.mlp.W3.',1, []);
         
-                    Mb1 = initParent.mlp.b1;
-                    Mb2 = initParent.mlp.b2;
-                    Mb3 = initParent.mlp.b3;              
+                    Mb1 = obj.model_1.mlp.b1;
+                    Mb2 = obj.model_1.mlp.b2;
+                    Mb3 = obj.model_1.mlp.b3;              
     
-                    obj.evoSandBox(parent,:) = {MW1; MW2; MW3; Mb1; Mb2; Mb3};
+                    obj.evoSandBox(counter,:) = {MW1; MW2; MW3; Mb1; Mb2; Mb3};
                 end
+                % Model 1
+                M1W1 = reshape(obj.model_1.mlp.W1.',1, []);
+                M1W2 = reshape(obj.model_1.mlp.W2.',1, []);
+                M1W3 = reshape(obj.model_1.mlp.W3.',1, []);
+    
+                M1b1 = obj.model_1.mlp.b1;
+                M1b2 = obj.model_1.mlp.b2;
+                M1b3 = obj.model_1.mlp.b3;
+    
+                obj.evoSandBox(1,:) = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
+                %obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
+                
+                % Model 2
+                M2W1 = reshape(obj.model_2.mlp.W1.',1, []);
+                M2W2 = reshape(obj.model_2.mlp.W2.',1, []);
+                M2W3 = reshape(obj.model_2.mlp.W3.',1, []);
+    
+                M2b1 = obj.model_2.mlp.b1;
+                M2b2 = obj.model_2.mlp.b2;
+                M2b3 = obj.model_2.mlp.b3;
+                
+                obj.evoSandBox(2,:) = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
+                %obj.parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
+    
+                % Model 3
+                M3W1 = reshape(obj.model_3.mlp.W1.',1, []);
+                M3W2 = reshape(obj.model_3.mlp.W2.',1, []);
+                M3W3 = reshape(obj.model_3.mlp.W3.',1, []);
+    
+                M3b1 = obj.model_3.mlp.b1;
+                M3b2 = obj.model_3.mlp.b2;
+                M3b3 = obj.model_3.mlp.b3;
+    
+                    
+                obj.evoSandBox(3,:) = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
+    
+                %obj.parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
+    
     
                 % do cross over and create 7 more children
                 

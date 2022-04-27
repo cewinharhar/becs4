@@ -78,6 +78,7 @@ classdef optimizer
                 nn.mlp = nn.mlp - obj.lr * gradient / ((obj.sumGradSqrt + epsilon)^0.5); 
 
             elseif strcmp(obj.opt, 'Adadelta')
+                
                 epsilon = 10^-8;
 
                 gradient = nn.grad;
