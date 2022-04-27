@@ -47,7 +47,7 @@ classdef genAlg
         parent3
         newweight1
         new_population
-        mutRate
+        
     end
 
     methods
@@ -93,7 +93,7 @@ classdef genAlg
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
             %exit statement
-            while obj.generationCounter < 100
+            while obj.generationCounter < 25
                 obj.generationCounter = obj.generationCounter + 1;
                 disp("generation")
                 disp(obj.generationCounter)
@@ -166,20 +166,9 @@ classdef genAlg
                 %-----               
 
                 for hyperparameter = 1:width(obj.evoSandBox)
-                    for child = 4:10
-              
                     
-                        %-----
-                        % cross over
-                        wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
-                        obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
-
-                        % Evolution or not?
-                        %if obj.crossOverRate >= rand()
-                           %if not go to next column
-                        %   continue
-                        %end 
-
+                    for child = 4:10
+                        obj.evoSandBox(child, hyperparameter) = obj.evoSandBox(1,hyperparameter);
                         %-----
                         %mutation
                         
@@ -189,12 +178,24 @@ classdef genAlg
                         for pointMutation = mutationSites
                             %differentiate between weights and bias mutation
                             if hyperparameter < 4 %only weights
-                                mutant = randi([-200, 200], 1) / 10000;
+                                mutant = randi([-100, 100], 1) / 10000;
                             else                  %only biases
-                                mutant = randi([-400, 400], 1) / 10000;
+                                mutant = randi([-200, 200], 1) / 10000;
                             end
                             obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
                         end
+                        %-----
+                        % cross over
+                        wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
+                        
+
+                        % Evolution or not?
+                        if obj.crossOverRate <= rand()
+                           %if not go to next column
+                           obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
+                        end 
+
+
                     end
                 end
 
