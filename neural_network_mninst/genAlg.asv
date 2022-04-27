@@ -204,8 +204,9 @@ classdef genAlg
                 % biases don't need to be reshaped.
 
                 % get the new MLP and add it to the new population
-               
-                child = genModel(128, 64, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
+                % newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
+                child = NN(128, 64, "Adam", 0.001);
+                child = child.newNN(128, 64, "Adam",  0.001, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
                 obj.new_population = [obj.new_population, child];
 %             end
 

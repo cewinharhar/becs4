@@ -33,22 +33,6 @@ classdef MLP
             obj.b2 = randn(size_hl2, 1) * sqrt(1/size_hl1);
             obj.b3 = randn(10, 1) * sqrt(1/size_hl2);
         end
-        
-        % Creates a new MLP with weights from genetic algorthmn selection
-        function obj = GA_MLP(size_hl1, size_hl2, w1, w2, w3, b1, b2, b3)
-            
-            % Size of hiddenlayer 1&2
-            obj.size_hl1 = size_hl1;
-            obj.size_hl2 = size_hl2;
-            % Initialize weights
-            obj.W1 = w1;
-            obj.W2 = w2;
-            obj.W3 = w3;
-            % Initialize bias
-            obj.b1 = b1;
-            obj.b2 = b2;
-            obj.b3 = b3;
-        end
 
 
         % Enables addition of MLP models
