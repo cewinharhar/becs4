@@ -47,6 +47,7 @@ classdef genAlg
         parent3
         newweight1
         new_population
+        mutRate
     end
 
     methods
@@ -55,7 +56,7 @@ classdef genAlg
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
             % ydim is the number of hyperparameters arrays: (W, b)x layers            
-            
+            obj.mutRate = mutRate;
             %initialize class
             obj.nnMatrix    = nnMatrix;
             obj.test_data   = test_data;
@@ -92,18 +93,19 @@ classdef genAlg
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
             %exit statement
-            while obj.generationCounter < 10
+            while obj.generationCounter < 100
                 obj.generationCounter = obj.generationCounter + 1;
                 disp("generation")
                 disp(obj.generationCounter)
+                disp("fitness")
                 disp("-----------------")
                 %------
                 % Fitness evaluation
                 %iterate over models
                 modelCounter = 0;
                 for model = obj.nnMatrix    
-                    disp("model")
-                    disp(model)
+%                     disp("model")
+%                     disp(model)
                     modelCounter = modelCounter +1;
     
                     %calculate accuracy
@@ -128,11 +130,12 @@ classdef genAlg
                 % Rank the models by accuracy
                 %-----
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
+                disp(obj.sorted_fitness)
 
                 %-----
                 %exit call
                 %-----
-                if max(obj.fitness) > 0.93
+                if max(obj.fitness) > 0.90
                     break
                 end                
                 
@@ -179,6 +182,7 @@ classdef genAlg
 
                         %-----
                         %mutation
+                        
                         chromosomLength = length(obj.evoSandBox{child, hyperparameter});
                         mutationSites   = randi([1,chromosomLength], round(obj.mutRate * chromosomLength));
     
@@ -206,7 +210,7 @@ classdef genAlg
                     obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox{updateModel,6}';
                 end
 
-                genAlgRecursive(obj)
+%                 genAlgRecursive(obj)
 
             end   
 
