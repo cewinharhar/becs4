@@ -30,7 +30,8 @@ classdef genAlg
         % an array of models
         nnMatrix
         % new population
-        
+        new_population
+
         model_1
         model_2
         model_3
@@ -38,8 +39,7 @@ classdef genAlg
         parent2
         parent3
         newweight1
-        new_population
-        child
+        
     end
 
     methods
@@ -92,6 +92,11 @@ classdef genAlg
             obj.model_2 = obj.nnMatrix(obj.index(2));
             obj.model_3 = obj.nnMatrix(obj.index(3));
 
+            for i=1:3
+                NN_to_genMod(obj.nnMatrix(obj.index(i)).grad.W1)
+
+            end
+
             obj.new_population = [];
             obj.new_population = [obj.new_population, obj.model_1];
             obj.new_population = [obj.new_population, obj.model_2];
@@ -103,42 +108,42 @@ classdef genAlg
             %reshape(model.',1, [])
 
             % Model 1
-            M1W1 = reshape(obj.model_1.grad.W1.',1, []);
-            M1W2 = reshape(obj.model_1.grad.W2.',1, []);
-            M1W3 = reshape(obj.model_1.grad.W3.',1, []);
+            M1W1 = reshape(obj.model_1.mlp.W1.',1, []);
+            M1W2 = reshape(obj.model_1.mlp.W2.',1, []);
+            M1W3 = reshape(obj.model_1.mlp.W3.',1, []);
 
-            M1b1 = obj.model_1.grad.b1;
-            M1b2 = obj.model_1.grad.b2;
-            M1b3 = obj.model_1.grad.b3;
+            M1b1 = obj.model_1.mlp.b1;
+            M1b2 = obj.model_1.mlp.b2;
+            M1b3 = obj.model_1.mlp.b3;
 
             obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
             
             % Model 2
-            M2W1 = reshape(obj.model_2.grad.W1.',1, []);
-            M2W2 = reshape(obj.model_2.grad.W2.',1, []);
-            M2W3 = reshape(obj.model_2.grad.W3.',1, []);
+            M2W1 = reshape(obj.model_2.mlp.W1.',1, []);
+            M2W2 = reshape(obj.model_2.mlp.W2.',1, []);
+            M2W3 = reshape(obj.model_2.mlp.W3.',1, []);
 
-            M2b1 = obj.model_2.grad.b1;
-            M2b2 = obj.model_2.grad.b2;
-            M2b3 = obj.model_2.grad.b3;
+            M2b1 = obj.model_2.mlp.b1;
+            M2b2 = obj.model_2.mlp.b2;
+            M2b3 = obj.model_2.mlp.b3;
             
             obj.parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
 
             % Model 3
-            M3W1 = reshape(obj.model_3.grad.W1.',1, []);
-            M3W2 = reshape(obj.model_3.grad.W2.',1, []);
-            M3W3 = reshape(obj.model_3.grad.W3.',1, []);
+            M3W1 = reshape(obj.model_3.mlp.W1.',1, []);
+            M3W2 = reshape(obj.model_3.mlp.W2.',1, []);
+            M3W3 = reshape(obj.model_3.mlp.W3.',1, []);
 
-            M3b1 = obj.model_3.grad.b1;
-            M3b2 = obj.model_3.grad.b2;
-            M3b3 = obj.model_3.grad.b3;
+            M3b1 = obj.model_3.mlp.b1;
+            M3b2 = obj.model_3.mlp.b2;
+            M3b3 = obj.model_3.mlp.b3;
 
             obj.parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
             
             % do cross over and create 7 more children
             
 
-%             for i=1:7
+            for i=1:7
                 
                 indexW1 = randperm(length(obj.parent1{1})); % create random index
                 elements1 = round(length(indexW1)*0.33); %index using first 33%
@@ -207,10 +212,9 @@ classdef genAlg
 
                 % get the new MLP and add it to the new population
                
-                obj.child = genModel(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
-%                 child.GA_MLP(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
-%                 obj.new_population = [obj.new_population, child];
-%             end
+                child = genModel(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
+                obj.new_population = [obj.new_population, child];
+            end
 
 
 

@@ -30,7 +30,8 @@ classdef genAlg
         % an array of models
         nnMatrix
         % new population
-        
+        new_population
+
         model_1
         model_2
         model_3
@@ -38,7 +39,7 @@ classdef genAlg
         parent2
         parent3
         newweight1
-        new_population
+        
     end
 
     methods
@@ -91,6 +92,11 @@ classdef genAlg
             obj.model_2 = obj.nnMatrix(obj.index(2));
             obj.model_3 = obj.nnMatrix(obj.index(3));
 
+            for i=1:3
+                NN_to_genMod(obj.nnMatrix(obj.index(i)).m)
+
+            end
+
             obj.new_population = [];
             obj.new_population = [obj.new_population, obj.model_1];
             obj.new_population = [obj.new_population, obj.model_2];
@@ -133,10 +139,11 @@ classdef genAlg
             M3b3 = obj.model_3.grad.b3;
 
             obj.parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
+            
             % do cross over and create 7 more children
             
 
-%             for i=1:7
+            for i=1:7
                 
                 indexW1 = randperm(length(obj.parent1{1})); % create random index
                 elements1 = round(length(indexW1)*0.33); %index using first 33%
@@ -190,7 +197,7 @@ classdef genAlg
                 elements1 = round(length(indexb3)*0.33);
                 elements2 = round(length(indexb3)*0.667);
                 elements3 = length(indexb3);
-                newbias3 = zeros(1,length(obj.parent1{4}));
+                newbias3 = zeros(1,length(obj.parent1{6}));
                 newbias3(1:elements1) = obj.parent1{6}(indexb3(1:elements1));
                 newbias3(elements1:elements2) = obj.parent2{6}(indexb3(elements1:elements2));
                 newbias3(elements2:elements3) = obj.parent3{6}(indexb3(elements2:elements3));
@@ -204,11 +211,10 @@ classdef genAlg
                 % biases don't need to be reshaped.
 
                 % get the new MLP and add it to the new population
-                % newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
-                child = NN(128, 64, "Adam", 0.001);
-                child = child.newNN(128, 64, "Adam",  0.001, newweight1, newweight2, newweight3, newbias1, newbias2, newbias3);
+               
+                child = genModel(128, 64, (newweight1), (newweight2), (newweight3), (newbias1), (newbias2), (newbias3));
                 obj.new_population = [obj.new_population, child];
-%             end
+            end
 
 
 
