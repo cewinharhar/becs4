@@ -101,7 +101,9 @@ classdef genAlg
                 % Fitness evaluation
                 %iterate over models
                 modelCounter = 0;
-                for model = obj.nnMatrix            
+                for model = obj.nnMatrix    
+                    disp("model")
+                    disp(model)
                     modelCounter = modelCounter +1;
     
                     %calculate accuracy
