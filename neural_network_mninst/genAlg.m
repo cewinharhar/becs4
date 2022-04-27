@@ -91,16 +91,24 @@ classdef genAlg
             obj.model_1 = obj.nnMatrix(obj.index(1));
             obj.model_2 = obj.nnMatrix(obj.index(2));
             obj.model_3 = obj.nnMatrix(obj.index(3));
-
+            obj.new_population = [];
             for i=1:3
-                NN_to_genMod(obj.nnMatrix(obj.index(i)).grad.W1)
+                w1 = obj.nnMatrix(obj.index(i)).mlp.W1;
+                w2 = obj.nnMatrix(obj.index(i)).mlp.W2;
+                w3 = obj.nnMatrix(obj.index(i)).mlp.W3;
+                b1 = obj.nnMatrix(obj.index(i)).mlp.b1;
+                b2 = obj.nnMatrix(obj.index(i)).mlp.b2;
+                b3 = obj.nnMatrix(obj.index(i)).mlp.b3;
+
+                NN_to_genMod = genModel(128, 64, w1, w2, w3, b1, b2, b3);
+                obj.new_population = [obj.new_population, NN_to_genMod];
 
             end
 
-            obj.new_population = [];
-            obj.new_population = [obj.new_population, obj.model_1];
-            obj.new_population = [obj.new_population, obj.model_2];
-            obj.new_population = [obj.new_population, obj.model_3];
+            
+%             obj.new_population = [obj.new_population, obj.model_1];
+%             obj.new_population = [obj.new_population, obj.model_2];
+%             obj.new_population = [obj.new_population, obj.model_3];
 
 
             % Get the weights and biases of each model, flatten and store

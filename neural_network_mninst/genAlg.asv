@@ -91,13 +91,21 @@ classdef genAlg
             obj.model_1 = obj.nnMatrix(obj.index(1));
             obj.model_2 = obj.nnMatrix(obj.index(2));
             obj.model_3 = obj.nnMatrix(obj.index(3));
-
+            
             for i=1:3
-                NN_to_genMod(obj.nnMatrix(obj.index(i)).m)
+                w1 = obj.nnMatrix(obj.index(i)).mlp.W1;
+                w2 = obj.nnMatrix(obj.index(i)).mlp.W2;
+                w3 = obj.nnMatrix(obj.index(i)).mlp.W3;
+                b1 = obj.nnMatrix(obj.index(i)).mlp.b1;
+                b2 = obj.nnMatrix(obj.index(i)).mlp.b2;
+                b3 = obj.nnMatrix(obj.index(i)).mlp.b3;
+
+                NN_to_genMod = genModel(128, 64, w1, w2, w3, b1, b2, b3);
+                obj.new_population = [obj.new_population, NN_to_genMod];
 
             end
 
-            obj.new_population = [];
+            
             obj.new_population = [obj.new_population, obj.model_1];
             obj.new_population = [obj.new_population, obj.model_2];
             obj.new_population = [obj.new_population, obj.model_3];
@@ -108,35 +116,35 @@ classdef genAlg
             %reshape(model.',1, [])
 
             % Model 1
-            M1W1 = reshape(obj.model_1.grad.W1.',1, []);
-            M1W2 = reshape(obj.model_1.grad.W2.',1, []);
-            M1W3 = reshape(obj.model_1.grad.W3.',1, []);
+            M1W1 = reshape(obj.model_1.mlp.W1.',1, []);
+            M1W2 = reshape(obj.model_1.mlp.W2.',1, []);
+            M1W3 = reshape(obj.model_1.mlp.W3.',1, []);
 
-            M1b1 = obj.model_1.grad.b1;
-            M1b2 = obj.model_1.grad.b2;
-            M1b3 = obj.model_1.grad.b3;
+            M1b1 = obj.model_1.mlp.b1;
+            M1b2 = obj.model_1.mlp.b2;
+            M1b3 = obj.model_1.mlp.b3;
 
             obj.parent1 = {M1W1; M1W2; M1W3; M1b1; M1b2; M1b3};
             
             % Model 2
-            M2W1 = reshape(obj.model_2.grad.W1.',1, []);
-            M2W2 = reshape(obj.model_2.grad.W2.',1, []);
-            M2W3 = reshape(obj.model_2.grad.W3.',1, []);
+            M2W1 = reshape(obj.model_2.mlp.W1.',1, []);
+            M2W2 = reshape(obj.model_2.mlp.W2.',1, []);
+            M2W3 = reshape(obj.model_2.mlp.W3.',1, []);
 
-            M2b1 = obj.model_2.grad.b1;
-            M2b2 = obj.model_2.grad.b2;
-            M2b3 = obj.model_2.grad.b3;
+            M2b1 = obj.model_2.mlp.b1;
+            M2b2 = obj.model_2.mlp.b2;
+            M2b3 = obj.model_2.mlp.b3;
             
             obj.parent2 = {M2W1; M2W2; M2W3; M2b1; M2b2; M2b3};
 
             % Model 3
-            M3W1 = reshape(obj.model_3.grad.W1.',1, []);
-            M3W2 = reshape(obj.model_3.grad.W2.',1, []);
-            M3W3 = reshape(obj.model_3.grad.W3.',1, []);
+            M3W1 = reshape(obj.model_3.mlp.W1.',1, []);
+            M3W2 = reshape(obj.model_3.mlp.W2.',1, []);
+            M3W3 = reshape(obj.model_3.mlp.W3.',1, []);
 
-            M3b1 = obj.model_3.grad.b1;
-            M3b2 = obj.model_3.grad.b2;
-            M3b3 = obj.model_3.grad.b3;
+            M3b1 = obj.model_3.mlp.b1;
+            M3b2 = obj.model_3.mlp.b2;
+            M3b3 = obj.model_3.mlp.b3;
 
             obj.parent3 = {M3W1; M3W2; M3W3; M3b1; M3b2; M3b3};
             
