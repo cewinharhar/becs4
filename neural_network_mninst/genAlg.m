@@ -168,7 +168,7 @@ classdef genAlg
     
 %                 yyaxis left
 
-                scatter(genArr, fitArr, 'filled', 'o','MarkerEdgeColor','flat','MarkerFaceColor','none')
+%                 scatter(genArr, fitArr)
                 plot(genArr, fitArr, 'HandleVisibility','off')
         
 %             yyaxis right
@@ -180,7 +180,7 @@ classdef genAlg
                 %-----
                 %exit call
                 %-----
-                if max(obj.fitness) > 0.90
+                if max(obj.fitness) > 0.95
                     break
                 end                
                 
@@ -217,8 +217,8 @@ classdef genAlg
                         %-----
                         % cross over
 
-                        wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
-%                         obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
+                        wheelOfFortune = obj.evoSandBox(1:2,hyperparameter);
+%                         obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,2],1));
                         % Create indexes into the hyperparameter of
                         % interest
 
@@ -228,9 +228,9 @@ classdef genAlg
                         index3 = length(indexHyp);
                         indices = [index1 index2 index3];
                         
-                        obj.evoSandBox{child, hyperparameter}(1:indices(1)) = wheelOfFortune{randi([1,3],1)}(1:indices(1));
-                        obj.evoSandBox{child, hyperparameter}(indices(1):indices(2)) = wheelOfFortune{randi([1,3],1)}(indices(1):indices(2));
-                        obj.evoSandBox{child, hyperparameter}(indices(2):indices(3)) = wheelOfFortune{randi([1,3],1)}(indices(2):indices(3));
+                        obj.evoSandBox{child, hyperparameter}(1:indices(1)) = wheelOfFortune{randi([1,2],1)}(1:indices(1));
+                        obj.evoSandBox{child, hyperparameter}(indices(1):indices(2)) = wheelOfFortune{randi([1,2],1)}(indices(1):indices(2));
+                        obj.evoSandBox{child, hyperparameter}(indices(2):indices(3)) = wheelOfFortune{randi([1,2],1)}(indices(2):indices(3));
 
 
                         
@@ -240,7 +240,7 @@ classdef genAlg
                         if obj.mutRate >= rand()
                             obj.mutations = obj.mutations +1;
                             chromosomLength = length(obj.evoSandBox{child, hyperparameter});
-                            mutationSites   = randi([1,chromosomLength], round(0.0001 * chromosomLength));
+                            mutationSites   = randi([1,chromosomLength], round(0.01 * chromosomLength));
         
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation

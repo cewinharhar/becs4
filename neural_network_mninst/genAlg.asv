@@ -168,7 +168,7 @@ classdef genAlg
     
 %                 yyaxis left
 
-                scatter(genArr, fitArr, 'filled', 'o','MarkerEdgeColor','flat','MarkerFaceColor','none')
+%                 scatter(genArr, fitArr)
                 plot(genArr, fitArr, 'HandleVisibility','off')
         
 %             yyaxis right
@@ -180,7 +180,7 @@ classdef genAlg
                 %-----
                 %exit call
                 %-----
-                if max(obj.fitness) > 0.90
+                if max(obj.fitness) > 0.95
                     break
                 end                
                 
@@ -240,7 +240,7 @@ classdef genAlg
                         if obj.mutRate >= rand()
                             obj.mutations = obj.mutations +1;
                             chromosomLength = length(obj.evoSandBox{child, hyperparameter});
-                            mutationSites   = randi([1,chromosomLength], round(0.1 * chromosomLength));
+                            mutationSites   = randi([1,chromosomLength], round(0.001 * chromosomLength));
         
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation
