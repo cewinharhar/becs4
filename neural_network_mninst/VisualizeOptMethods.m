@@ -55,8 +55,6 @@ function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size
     
         %iterate over epochs
         for e = 1:epochs 
-            disp("epoch")
-            disp(e)
             samples = 1;
             
             % Loop over gradient descent steps
