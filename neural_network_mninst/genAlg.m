@@ -240,7 +240,7 @@ classdef genAlg
                         if obj.mutRate >= rand()
                             obj.mutations = obj.mutations +1;
                             chromosomLength = length(obj.evoSandBox{child, hyperparameter});
-                            mutationSites   = randi([1,chromosomLength], round(0.1 * chromosomLength));
+                            mutationSites   = randi([1,chromosomLength], round(0.0001 * chromosomLength));
         
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation
