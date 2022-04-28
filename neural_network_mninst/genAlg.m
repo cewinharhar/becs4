@@ -103,7 +103,6 @@ classdef genAlg
                 obj.generationCounter = obj.generationCounter + 1;
                 disp("generation")
                 disp(obj.generationCounter)
-                disp("fitness")
                 disp("-----------------")
                 %------
                 % Fitness evaluation
@@ -138,7 +137,9 @@ classdef genAlg
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
                 disp("mutations")
                 disp(obj.mutations)
-                disp(obj.sorted_fitness)
+                disp("------------")
+                disp("fitness")
+                disp(obj.sorted_fitness(1:5))
 
                 %-----
                 %exit call
@@ -151,7 +152,7 @@ classdef genAlg
                 % extract top 3 models and transfer information into
                 % sandbox
                 %-----                
-                for parent = 1:2
+                for parent = 1:3
                     initParent = obj.nnMatrix(obj.index(parent));
     
                 %-----
@@ -208,9 +209,9 @@ classdef genAlg
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation
                                 if hyperparameter < 4 %only weights
-                                    mutant = randi([-100, 100], 1) / 10000;
+                                    mutant = randi([-50, 50], 1) / 10000;
                                 else                  %only biases
-                                    mutant = randi([-200, 200], 1) / 10000;
+                                    mutant = randi([-100, 100], 1) / 10000;
                                 end
                                 obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
                             end
