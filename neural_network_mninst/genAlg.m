@@ -39,11 +39,6 @@ classdef genAlg
         generations
         %sandbox
         evoSandBox
-        % new population        
-     
-      
-        newweight1
-        new_population
         no_models
         mutations
         
@@ -73,11 +68,8 @@ classdef genAlg
             obj.fitness = zeros(length(nnMatrix), 1 );
 
             %set evolution sandbox
-            %sample   = zeros(10, 6);
-            %rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
-            %colNames = {'w1','w2','w3','b1', 'b2', 'b3'};          
-            %obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
-            %use cell arrays for this (like lists)
+            % This is where we store our models with their associated
+            % weights and bias's
             obj.evoSandBox = {};
             for rows = 1:obj.no_models
                 for cols = 1:6
@@ -86,36 +78,43 @@ classdef genAlg
             end      
 
             obj.generationCounter = 0;
-
+            
+            % calling the main function in this class where the actual
+            % algorthm lies.
             obj = genAlgRecursive(obj);
 
         end
 
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
+            
+            % setting up a basic visualisation to display the accuracy of
+            % the most fit model
 
             %initialize figure
             figure('Name','comparing generations')
                 grid on;
             
-                % --- Titelei
+                % --- title
                 title('best fitness for each generation');
                 xlabel('Generations');
-            
-                
                 ylabel('fitness');
-                
                 hold on
 
-            % Create array for the fitness of each generation
+            % Create array for the fitness of each generation and each
+            % generation for the x-axis
             fitArr = [];
             genArr = [];
 
-
+            % this is for fun to see the total amount of mutations that
+            % occured
             obj.mutations = 0;
-            %exit statement
+
+            %exit criteria
             while obj.generationCounter < obj.generations
                 obj.generationCounter = obj.generationCounter + 1;
+
+                % appending the generations to the array for visualisation
                 genArr = [genArr, obj.generationCounter];
 
                 
@@ -123,20 +122,17 @@ classdef genAlg
                 disp("generation")
                 disp(obj.generationCounter)
                 disp("-----------------")
+                
                 %------
                 % Fitness evaluation
                 %iterate over models
                 modelCounter = 0;
                 for model = obj.nnMatrix    
-%                     disp("model")
-%                     disp(model)
                     modelCounter = modelCounter +1;
     
-                    %calculate accuracy
+                    %calculate accuracy (fitness) for each model
                     hits = 0;
                     n = length(obj.test_data);
-                    %disp("length n")
-                    %disp(n)
                     for i = 1:n                
                         out = model.predict(obj.test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score                
@@ -144,6 +140,7 @@ classdef genAlg
                             hits = hits + 1; % Count the number of correct classifications
                         end       
                     end
+
                     %calculate accuracy
                     accuracy = hits/n;
                     obj.fitness(modelCounter) = accuracy;
@@ -153,37 +150,29 @@ classdef genAlg
                 %-----
                 % Rank the models by accuracy
                 %-----
+
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
+                % appending the most accurate of each model for
+                % visualisation
                 fitArr = [fitArr, obj.sorted_fitness(1)];
                 disp("mutations")
                 disp(obj.mutations)
                 disp("------------")
                 disp("fitness")
+                
                 disp(obj.sorted_fitness(1:5))
+                
                 %plot the accuracy
-    
-%                 yyaxis left
-
-%                 scatter(genArr, fitArr)
                 plot(genArr, fitArr, 'HandleVisibility','off')
-        
-%             yyaxis right
-%             scatter([1:length(acc)], err, 'filled', plotCol(cou), 'HandleVisibility','off')
-%             plot([1:length(acc)], err, 'HandleVisibility','off')
             drawnow
             hold on
-
-                %-----
-                %exit call
-                %-----
-                if max(obj.fitness) > 0.95
-                    break
-                end                
+              
                 
                 %-----
                 % extract top 3 models and transfer information into
                 % sandbox
-                %-----                
+                %-----    
+
                 for parent = 1:2
                     initParent = obj.nnMatrix(obj.index(parent));
     
@@ -210,11 +199,12 @@ classdef genAlg
                     
                     for child = 3:obj.no_models
                         obj.evoSandBox(child, hyperparameter) = obj.evoSandBox(1,hyperparameter);
+                        
                         %-----
                         % cross over
 
                         wheelOfFortune = obj.evoSandBox(1:2,hyperparameter);
-%                         obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,2],1));
+%                       obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,2],1));
                         % Create indexes into the hyperparameter of
                         % interest
 
@@ -248,16 +238,6 @@ classdef genAlg
                                 obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
                             end
                         end
-                        
-                        
-
-                        % Evolution or not?
-%                         if obj.crossOverRate <= rand()
-%                            %if not go to next column
-%                            
-%                         end 
-
-
                     end
                 end
 
@@ -272,11 +252,7 @@ classdef genAlg
                     obj.nnMatrix(updateModel).mlp.b2 = obj.evoSandBox{updateModel,5}';
                     obj.nnMatrix(updateModel).mlp.b3 = obj.evoSandBox{updateModel,6}';
                 end
-
-%                 genAlgRecursive(obj)
-
             end   
-
         end
     end
 end

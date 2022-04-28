@@ -35,19 +35,10 @@ classdef genAlg
         test_images
         test_labels
         mutRate
-        crossOverRate
+        
         generations
         %sandbox
         evoSandBox
-        % new population        
-        model_1
-        model_2
-        model_3
-        parent1
-        parent2
-        parent3
-        newweight1
-        new_population
         no_models
         mutations
         
@@ -55,7 +46,7 @@ classdef genAlg
 
     methods
 
-        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, crossOverRate, generations)
+        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, generations)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
             % ydim is the number of hyperparameters arrays: (W, b)x layers
@@ -70,18 +61,15 @@ classdef genAlg
             % 0.05-0.1
             obj.mutRate = mutRate;
             % 0.2 - 0.3
-            obj.crossOverRate = crossOverRate;
+            
             obj.no_models = length(nnMatrix);
 
             %set fitness scores
             obj.fitness = zeros(length(nnMatrix), 1 );
 
             %set evolution sandbox
-            %sample   = zeros(10, 6);
-            %rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
-            %colNames = {'w1','w2','w3','b1', 'b2', 'b3'};          
-            %obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
-            %use cell arrays for this (like lists)
+            % This is where we store our models with their associated
+            % weights and bias's
             obj.evoSandBox = {};
             for rows = 1:obj.no_models
                 for cols = 1:6
@@ -90,36 +78,43 @@ classdef genAlg
             end      
 
             obj.generationCounter = 0;
-
+            
+            % calling the main function in this class where the actual
+            % algorthm lies.
             obj = genAlgRecursive(obj);
 
         end
 
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
+            
+            % setting up a basic visualisation to display the accuracy of
+            % the most fit model
 
             %initialize figure
             figure('Name','comparing generations')
                 grid on;
             
-                % --- Titelei
+                % --- title
                 title('best fitness for each generation');
                 xlabel('Generations');
-            
-                
                 ylabel('fitness');
-                
                 hold on
 
-            % Create array for the fitness of each generation
+            % Create array for the fitness of each generation and each
+            % generation for the x-axis
             fitArr = [];
             genArr = [];
 
-
+            % this is for fun to see the total amount of mutations that
+            % occured
             obj.mutations = 0;
-            %exit statement
+
+            %exit criteria
             while obj.generationCounter < obj.generations
                 obj.generationCounter = obj.generationCounter + 1;
+
+                % appending the generations to the array for visualisation
                 genArr = [genArr, obj.generationCounter];
 
                 
@@ -127,20 +122,17 @@ classdef genAlg
                 disp("generation")
                 disp(obj.generationCounter)
                 disp("-----------------")
+                
                 %------
                 % Fitness evaluation
                 %iterate over models
                 modelCounter = 0;
                 for model = obj.nnMatrix    
-%                     disp("model")
-%                     disp(model)
                     modelCounter = modelCounter +1;
     
-                    %calculate accuracy
+                    %calculate accuracy (fitness) for each model
                     hits = 0;
                     n = length(obj.test_data);
-                    %disp("length n")
-                    %disp(n)
                     for i = 1:n                
                         out = model.predict(obj.test_images(:,i)); % model prediction vector
                         [~, num] = max(out); % Find highest prediction score                
