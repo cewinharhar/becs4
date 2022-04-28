@@ -35,27 +35,27 @@ classdef genAlg
         test_images
         test_labels
         mutRate
-        crossOverRate
+        
+        generations
         %sandbox
         evoSandBox
         % new population        
-        model_1
-        model_2
-        model_3
-        parent1
-        parent2
-        parent3
+     
+      
         newweight1
         new_population
+        no_models
+        mutations
         
     end
 
     methods
 
-        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, crossOverRate)
+        function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, generations)
             %function to optimize the weights of h1 and h2
             % the nnMatrix is a matrix with xdim = number of models and
-            % ydim is the number of hyperparameters arrays: (W, b)x layers            
+            % ydim is the number of hyperparameters arrays: (W, b)x layers
+            obj.generations = generations;
             obj.mutRate = mutRate;
             %initialize class
             obj.nnMatrix    = nnMatrix;
@@ -66,7 +66,8 @@ classdef genAlg
             % 0.05-0.1
             obj.mutRate = mutRate;
             % 0.2 - 0.3
-            obj.crossOverRate = crossOverRate;
+            
+            obj.no_models = length(nnMatrix);
 
             %set fitness scores
             obj.fitness = zeros(length(nnMatrix), 1 );
@@ -78,9 +79,9 @@ classdef genAlg
             %obj.evoSandBox = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
             %use cell arrays for this (like lists)
             obj.evoSandBox = {};
-            for rows = 1:10
+            for rows = 1:obj.no_models
                 for cols = 1:6
-                  obj.evoSandBox{rows,cols} = 1:10;
+                  obj.evoSandBox{rows,cols} = 1:obj.no_models;
                 end
             end      
 
@@ -92,12 +93,35 @@ classdef genAlg
 
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
+
+            %initialize figure
+            figure('Name','comparing generations')
+                grid on;
+            
+                % --- Titelei
+                title('best fitness for each generation');
+                xlabel('Generations');
+            
+                
+                ylabel('fitness');
+                
+                hold on
+
+            % Create array for the fitness of each generation
+            fitArr = [];
+            genArr = [];
+
+
+            obj.mutations = 0;
             %exit statement
-            while obj.generationCounter < 25
+            while obj.generationCounter < obj.generations
                 obj.generationCounter = obj.generationCounter + 1;
+                genArr = [genArr, obj.generationCounter];
+
+                
+
                 disp("generation")
                 disp(obj.generationCounter)
-                disp("fitness")
                 disp("-----------------")
                 %------
                 % Fitness evaluation
@@ -130,12 +154,29 @@ classdef genAlg
                 % Rank the models by accuracy
                 %-----
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
-                disp(obj.sorted_fitness)
+                fitArr = [fitArr, obj.sorted_fitness(1)];
+                disp("mutations")
+                disp(obj.mutations)
+                disp("------------")
+                disp("fitness")
+                disp(obj.sorted_fitness(1:5))
+                %plot the accuracy
+    
+%                 yyaxis left
+
+%                 scatter(genArr, fitArr)
+                plot(genArr, fitArr, 'HandleVisibility','off')
+        
+%             yyaxis right
+%             scatter([1:length(acc)], err, 'filled', plotCol(cou), 'HandleVisibility','off')
+%             plot([1:length(acc)], err, 'HandleVisibility','off')
+            drawnow
+            hold on
 
                 %-----
                 %exit call
                 %-----
-                if max(obj.fitness) > 0.90
+                if max(obj.fitness) > 0.95
                     break
                 end                
                 
@@ -143,7 +184,7 @@ classdef genAlg
                 % extract top 3 models and transfer information into
                 % sandbox
                 %-----                
-                for parent = 1:3
+                for parent = 1:2
                     initParent = obj.nnMatrix(obj.index(parent));
     
                 %-----
@@ -167,33 +208,54 @@ classdef genAlg
 
                 for hyperparameter = 1:width(obj.evoSandBox)
                     
-                    for child = 4:10
+                    for child = 3:obj.no_models
                         obj.evoSandBox(child, hyperparameter) = obj.evoSandBox(1,hyperparameter);
                         %-----
-                        %mutation
-                        
-                        chromosomLength = length(obj.evoSandBox{child, hyperparameter});
-                        mutationSites   = randi([1,chromosomLength], round(obj.mutRate * chromosomLength));
-    
-                        for pointMutation = mutationSites
-                            %differentiate between weights and bias mutation
-                            if hyperparameter < 4 %only weights
-                                mutant = randi([-100, 100], 1) / 10000;
-                            else                  %only biases
-                                mutant = randi([-200, 200], 1) / 10000;
-                            end
-                            obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
-                        end
-                        %-----
                         % cross over
-                        wheelOfFortune = obj.evoSandBox(1:3,hyperparameter);
+
+                        wheelOfFortune = obj.evoSandBox(1:2,hyperparameter);
+%                         obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,2],1));
+                        % Create indexes into the hyperparameter of
+                        % interest
+
+                        indexHyp = randperm(length(obj.evoSandBox{1, hyperparameter}));
+                        index1 = round(length(indexHyp)*0.33);
+                        index2 = round(length(indexHyp)*0.66);
+                        index3 = length(indexHyp);
+                        indices = [index1 index2 index3];
+                        
+                        obj.evoSandBox{child, hyperparameter}(1:indices(1)) = wheelOfFortune{randi([1,2],1)}(1:indices(1));
+                        obj.evoSandBox{child, hyperparameter}(indices(1):indices(2)) = wheelOfFortune{randi([1,2],1)}(indices(1):indices(2));
+                        obj.evoSandBox{child, hyperparameter}(indices(2):indices(3)) = wheelOfFortune{randi([1,2],1)}(indices(2):indices(3));
+
+
+                        
+
+                        %-----
+                        %mutation
+                        if obj.mutRate >= rand()
+                            obj.mutations = obj.mutations +1;
+                            chromosomLength = length(obj.evoSandBox{child, hyperparameter});
+                            mutationSites   = randi([1,chromosomLength], round(0.01 * chromosomLength));
+        
+                            for pointMutation = mutationSites
+                                %differentiate between weights and bias mutation
+                                if hyperparameter < 4 %only weights
+                                    mutant = randi([-100, 100], 1) / 10000;
+                                else                  %only biases
+                                    mutant = randi([-150, 150], 1) / 10000;
+                                end
+                                obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
+                            end
+                        end
+                        
                         
 
                         % Evolution or not?
-                        if obj.crossOverRate <= rand()
-                           %if not go to next column
-                           obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,3],1));
-                        end 
+%                         if obj.crossOverRate <= rand()
+%                            %if not go to next column
+%                            
+%                         end 
 
 
                     end
@@ -218,21 +280,6 @@ classdef genAlg
         end
     end
 end
-
-
-%rowNames = {'parent1','parent2','parent3','child1','child2','child3','child4','child5','child6','child7'};
-%con = containers.Map();
-%for o = rowNames
-%    con(o) = rand();
-%end
-
-
-%c = {};
-%for i = 1:10
-%    for o = 1:6
-%      c{i,o} = [1:10];
-%    end
-%end
 
 
 
