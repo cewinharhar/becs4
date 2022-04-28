@@ -97,10 +97,33 @@ classdef genAlg
 
          %recursive genetic algorithm function
         function obj = genAlgRecursive(obj)
+
+            %initialize figure
+            figure('Name','comparing generations')
+                grid on;
+            
+                % --- Titelei
+                title('best fitness for each generation');
+                xlabel('Generations');
+            
+                
+                ylabel('fitness');
+                
+                hold on
+
+            % Create array for the fitness of each generation
+            fitArr = [];
+            genArr = [];
+
+
             obj.mutations = 0;
             %exit statement
             while obj.generationCounter < obj.generations
                 obj.generationCounter = obj.generationCounter + 1;
+                genArr = [genArr, obj.generationCounter];
+
+                
+
                 disp("generation")
                 disp(obj.generationCounter)
                 disp("-----------------")
@@ -135,11 +158,24 @@ classdef genAlg
                 % Rank the models by accuracy
                 %-----
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
+                fitArr = [fitArr, obj.sorted_fitness(1)];
                 disp("mutations")
                 disp(obj.mutations)
                 disp("------------")
                 disp("fitness")
                 disp(obj.sorted_fitness(1:5))
+                %plot the accuracy
+    
+%                 yyaxis left
+
+                scatter(genArr, fitArr, 'filled', 'o','MarkerEdgeColor','flat','MarkerFaceColor','none')
+                plot(genArr, fitArr, 'HandleVisibility','off')
+        
+%             yyaxis right
+%             scatter([1:length(acc)], err, 'filled', plotCol(cou), 'HandleVisibility','off')
+%             plot([1:length(acc)], err, 'HandleVisibility','off')
+            drawnow
+            hold on
 
                 %-----
                 %exit call
@@ -152,7 +188,7 @@ classdef genAlg
                 % extract top 3 models and transfer information into
                 % sandbox
                 %-----                
-                for parent = 1:3
+                for parent = 1:2
                     initParent = obj.nnMatrix(obj.index(parent));
     
                 %-----
@@ -209,9 +245,9 @@ classdef genAlg
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation
                                 if hyperparameter < 4 %only weights
-                                    mutant = randi([-50, 50], 1) / 10000;
-                                else                  %only biases
                                     mutant = randi([-100, 100], 1) / 10000;
+                                else                  %only biases
+                                    mutant = randi([-150, 150], 1) / 10000;
                                 end
                                 obj.evoSandBox{child, hyperparameter}(pointMutation) = mutant;
                             end
