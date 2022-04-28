@@ -12,6 +12,8 @@ classdef NN
         optim
         %error
         error4
+        %rmse
+        rmse
         %cross entropy
         crossEnt
         
@@ -30,6 +32,9 @@ classdef NN
             
             % Initialize optimizer
             obj.optim = optimizer(opt, lr, obj.mlp);
+
+            %init rmse
+            obj.rmse = [];
             
         end
         function obj = newNN(size_hl1, size_hl2, opt, lr, w1, w2, w3, b1, b2, b3)
@@ -69,7 +74,8 @@ classdef NN
             
             %add error 
             obj.error4 = mean(error4 .^2);
-            obj.crossEnt = crossentropy(y, a4);
+            %obj.crossEnt = crossentropy(y, a4);
+            obj.rmse = [obj.rmse, obj.error4];
 
             obj.m = obj.m + 1; % Count number of samples in batch
         end
