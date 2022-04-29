@@ -1,7 +1,8 @@
 classdef optimizer
     properties
         opt % optimizer name
-        lr % learning rate        
+        lr % learning rate
+        
         % For the Adam optimizer:
         m % Moving avarage of the gradients
         v % Moving avarage of the squares of the gradients
@@ -51,8 +52,7 @@ classdef optimizer
                 nn.mlp = nn.mlp - obj.lr*nn.grad;
             
             elseif strcmp(obj.opt, 'Adam')
-                % Count number of steps
-                obj.t = obj.t+1; 
+                obj.t = obj.t+1; % Count number of steps
                 
                 % Moving avarages
                 obj.m = obj.beta1*obj.m + (1-obj.beta1)*nn.grad;
@@ -68,9 +68,8 @@ classdef optimizer
 
             elseif strcmp(obj.opt, 'Adagrad')
 
-                %define smoothing term to avoid division by zero
                 epsilon =  10^-8;
-
+                
                 %calculate sum of the squares of the gradients
                 obj.sumGradSqrt = obj.sumGradSqrt + (nn.grad^2);
 
@@ -80,16 +79,18 @@ classdef optimizer
 
             elseif strcmp(obj.opt, 'Adadelta')
                 
-                %define smoothing term to avoid division by zero
                 epsilon = 10^-8;
 
                 gradient = nn.grad;
                 %calculate sum of the squares of the gradients
                 obj.sumGradSqrt = obj.beta1*obj.sumGradSqrt + (1-obj.beta1)*(nn.grad^2);
-
                 %calculate change
-                nn.mlp = nn.mlp - obj.lr *gradient / ((obj.sumGradSqrt + epsilon)^0.5);               
+                nn.mlp = nn.mlp - obj.lr *gradient / ((obj.sumGradSqrt + epsilon)^0.5);
+                
+
             end
         end
-    end    
+
+    end
+    
 end
