@@ -1,16 +1,6 @@
 %% Genetic algorithm
-% I wonder if I can just average the top 3 models to produce one child? or
-% average them together with different weights? In the MLP file functions
-% were defined to do that.
-% to make the children, I can generate a random indexing into each weight
-% or bias. I'll take the first half of those and index into a parent and
-% give it to the child then take the latter half and index into the second
-% parent and place it into the child. Then do the same for the rest!! I
-% think this will work and then we don't need to flatten it (at 
-% least I don't think I will) hi
 classdef genAlg
-    % Neural Network object for training
-    
+    % Neural Network object for training    
     properties
         % fitness of the models
         fitness
@@ -29,27 +19,25 @@ classdef genAlg
         index
         % an array of models
         nnMatrix
-        %
+        %counts gens
         generationCounter
+        %saves the test, train data in the class
         test_data
         test_images
         test_labels
-        mutRate
-        
+        %saves the parameters in the class
+        mutRate        
         generations
-        %sandbox
-        evoSandBox
         no_models
         mutations
-        
+        %sandbox for evolution
+        evoSandBox       
     end
 
     methods
 
         function obj = genAlg(nnMatrix, test_data, test_images, test_labels,  mutRate, generations)
-            %function to optimize the weights of h1 and h2
-            % the nnMatrix is a matrix with xdim = number of models and
-            % ydim is the number of hyperparameters arrays: (W, b)x layers
+            %function to initialize the genetic algorithm 
             obj.generations = generations;
             obj.mutRate = mutRate;
             %initialize class
@@ -57,17 +45,14 @@ classdef genAlg
             obj.test_data   = test_data;
             obj.test_images = test_images;
             obj.test_labels = test_labels;
-            %both evolution paramters must be between 0 and 1
-            % 0.05-0.1
+            %evolution paramters must be between 0 and 1
             obj.mutRate = mutRate;
-            % 0.2 - 0.3
-            
+            %nr of models
             obj.no_models = length(nnMatrix);
-
-            %set fitness scores
+            %initialize fitness scores
             obj.fitness = zeros(length(nnMatrix), 1 );
 
-            %set evolution sandbox
+            %initialize evolution sandbox in a cell array format
             % This is where we store our models with their associated
             % weights and bias's
             obj.evoSandBox = {};
@@ -77,6 +62,7 @@ classdef genAlg
                 end
             end      
 
+            %counts the generations
             obj.generationCounter = 0;
             
             % calling the main function in this class where the actual
@@ -150,7 +136,6 @@ classdef genAlg
                 %-----
                 % Rank the models by accuracy
                 %-----
-
                 [obj.sorted_fitness, obj.index] = sort(obj.fitness, 'descend');
                 % appending the most accurate of each model for
                 % visualisation
@@ -158,18 +143,18 @@ classdef genAlg
                 disp("mutations")
                 disp(obj.mutations)
                 disp("------------")
-                disp("fitness")
-                
+                disp("fitness")                
                 disp(obj.sorted_fitness(1:5))
                 
                 %plot the accuracy
                 plot(genArr, fitArr, 'HandleVisibility','off')
+
             drawnow
             hold on
               
                 
                 %-----
-                % extract top 3 models and transfer information into
+                % extract top 2 models and transfer information into
                 % sandbox
                 %-----    
 
@@ -198,34 +183,39 @@ classdef genAlg
                 for hyperparameter = 1:width(obj.evoSandBox)
                     
                     for child = 3:obj.no_models
+
+                        %set the hyperparameters for each child as the ones
+                        %from the best parent
                         obj.evoSandBox(child, hyperparameter) = obj.evoSandBox(1,hyperparameter);
                         
                         %-----
                         % cross over
 
+                        %store the weights and biases of both parents                   
                         wheelOfFortune = obj.evoSandBox(1:2,hyperparameter);
-%                       obj.evoSandBox(child, hyperparameter) = wheelOfFortune(randi([1,2],1));
+
                         % Create indexes into the hyperparameter of
                         % interest
-
                         indexHyp = randperm(length(obj.evoSandBox{1, hyperparameter}));
                         index1 = round(length(indexHyp)*0.33);
                         index2 = round(length(indexHyp)*0.66);
                         index3 = length(indexHyp);
                         indices = [index1 index2 index3];
                         
-                        obj.evoSandBox{child, hyperparameter}(1:indices(1)) = wheelOfFortune{randi([1,2],1)}(1:indices(1));
+                        %swap the hyperparameteer parts
+                        obj.evoSandBox{child, hyperparameter}(1:indices(1))          = wheelOfFortune{randi([1,2],1)}(1:indices(1));
                         obj.evoSandBox{child, hyperparameter}(indices(1):indices(2)) = wheelOfFortune{randi([1,2],1)}(indices(1):indices(2));
-                        obj.evoSandBox{child, hyperparameter}(indices(2):indices(3)) = wheelOfFortune{randi([1,2],1)}(indices(2):indices(3));
-
-
-                        
+                        obj.evoSandBox{child, hyperparameter}(indices(2):indices(3)) = wheelOfFortune{randi([1,2],1)}(indices(2):indices(3));                        
 
                         %-----
                         %mutation
+
+                        %get a decision condition weather to mutate or not
                         if obj.mutRate >= rand()
                             obj.mutations = obj.mutations +1;
+                            %define the length of the chromosomes
                             chromosomLength = length(obj.evoSandBox{child, hyperparameter});
+                            %specify where the mutations occure
                             mutationSites   = randi([1,chromosomLength], round(0.01 * chromosomLength));
         
                             for pointMutation = mutationSites
