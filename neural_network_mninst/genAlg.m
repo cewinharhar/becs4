@@ -102,9 +102,7 @@ classdef genAlg
 
                 % appending the generations to the array for visualisation
                 genArr = [genArr, obj.generationCounter];
-
-                
-
+              
                 disp("generation")
                 disp(obj.generationCounter)
                 disp("-----------------")
@@ -150,8 +148,7 @@ classdef genAlg
                 plot(genArr, fitArr, 'HandleVisibility','off')
 
             drawnow
-            hold on
-              
+            hold on              
                 
                 %-----
                 % extract top 2 models and transfer information into
@@ -218,6 +215,8 @@ classdef genAlg
                             %specify where the mutations occure
                             mutationSites   = randi([1,chromosomLength], round(0.01 * chromosomLength));
         
+                            %loop over the mutation sites and mutate with a
+                            %random number inbetween a given range
                             for pointMutation = mutationSites
                                 %differentiate between weights and bias mutation
                                 if hyperparameter < 4 %only weights
@@ -232,9 +231,8 @@ classdef genAlg
                 end
 
                 %-----
-                %transfer hyperparameters back to models
-                for updateModel = 1:length(obj.nnMatrix)
-                
+                %Reshape the data and transfer hyperparameters back to models
+                for updateModel = 1:length(obj.nnMatrix)                
                     obj.nnMatrix(updateModel).mlp.W1 = reshape(obj.evoSandBox{updateModel,1}, [128, 784]);
                     obj.nnMatrix(updateModel).mlp.W2 = reshape(obj.evoSandBox{updateModel,2}, [64, 128]);
                     obj.nnMatrix(updateModel).mlp.W3 = reshape(obj.evoSandBox{updateModel,3}, [10, 64]);
