@@ -1,8 +1,3 @@
-%%
-%we dont need random is the genetic algorithm is used   
-%rng(0); % seed for the random number generator
-%%cd '/home/cewinharhar/GITHUB/becs4'/neural_network_mninst/
-%cd 'C:\Users\kevin yar\OneDrive - ZHAW\KEVIN STUFF\ZHAW\_PYTHON_R\_GITHUB\becs4\neural_network_mninst'
 function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size_hl2, lr, train_data, images, y, test_data, test_images, test_labels)
 
     %create container (dictionair equivalent) to store models
@@ -16,7 +11,7 @@ function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size
     figure('Name','Comparison optimization methods')
         grid on;
     
-        % --- Titelei
+        % --- labeling
         title('Comparison optimization methods');
         xlabel('Epochs');
     
@@ -47,6 +42,7 @@ function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size
         waitbar(cou/4, f, sprintf('Training Model %d: %%',  floor(cou/4*100)));
         %waitbar(cou, f, sprintf('Evaluating optimizer: %d: %d %%', nn.optim.opt, cou));
         
+        %set learning rate
         lr = lr;
     
         %specify parameters
@@ -73,15 +69,9 @@ function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size
                 % Number of data points covered (+1)
                 samples = samples + batch_size;
             
-            end
-            
-            %disp(nn.optim.opt);
-            %fprintf('Epochs:');
-            %disp(e) % Track number of epochs
-            
+            end            
             
             % Evaluate model accuracy
-            %disp('Evaluating model')
             hits = 0;
             n = length(test_data);
             for i = 1:n
@@ -95,28 +85,26 @@ function trained_models = VisualizeOptMethods(epochs, batch_size, size_hl1, size
         
             end
             
+            %calculate accuracy and error
             acc = [acc, hits/n*100];
             err = [err, mean(nn.rmse)];
     
-            %fprintf('Accuracy: ');
-            %fprintf('%f',hits/n*100)
-            
-            [images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
+            % Shuffle order of the images for next epoch
+            [images,y] = shuffle(images,y); 
         end
     
+        %append models
         trained_models = [trained_models, nn];
         
-        %plot the accuracy
-        
+        %plot the accuracy        
         yyaxis left
         plot(1:length(acc), acc ,plotCol(cou), "DisplayName", nn.optim.opt)
-        %plot([1:length(acc)], acc, 'HandleVisibility','off')
     
         yyaxis right
         plot(1:length(acc), err, plotCol(cou), 'HandleVisibility','off')
-        %plot([1:length(acc)], err, 'HandleVisibility','off')
+
         drawnow
-    
+        %reset accuracy and error
         acc = [];
         err = [];
         hold on

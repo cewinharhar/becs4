@@ -11,11 +11,9 @@ classdef NN
         % optimizer
         optim
         %error
-        error4
+        error
         %rmse
         rmse
-        %cross entropy
-        crossEnt
         
     end
     methods
@@ -73,9 +71,8 @@ classdef NN
             obj.grad.W1 = obj.grad.W1 + error2*a1';
             
             %add error 
-            obj.error4 = mean(error4 .^2);
-            %obj.crossEnt = crossentropy(y, a4);
-            obj.rmse = [obj.rmse, obj.error4];
+            obj.error = mean(error4 .^2);
+            obj.rmse = [obj.rmse, obj.error];
 
             obj.m = obj.m + 1; % Count number of samples in batch
         end
@@ -96,10 +93,6 @@ classdef NN
         
         function score = predict(obj, input)
             % Feed forward
-            %disp("inside NN")
-            %disp(size(obj.mlp.W1))
-            %disp(size(input))
-            %disp(size(obj.mlp.b1))
             z2 = obj.mlp.W1*input + obj.mlp.b1;
             a2 = ReLU(z2, 'forward');
             z3 = obj.mlp.W2*a2 + obj.mlp.b2;

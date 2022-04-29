@@ -3,7 +3,6 @@
 function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_size, images, train_data, y, nrOfModels)
     %create container (dictionair equivalent) to store models   
     modelArray = [];
-
     for modelIter = 1:nrOfModels
         f = waitbar(0, 'Starting');
         disp("training model:")
@@ -26,13 +25,10 @@ function modelArray = trainMod(size_hl1, size_hl2, optimizer, lr, epochs, batch_
                 samples = samples + batch_size;            
             end
             %not sure if we should use the shuffler here
-            %[images,y] = shuffle(images,y); % Shuffle order of the images for next epoch
         end
         close(f)
         %append models to model array
-        modelArray = [modelArray, model];
-        
-
+        modelArray = [modelArray, model];     
     end
 
 end
