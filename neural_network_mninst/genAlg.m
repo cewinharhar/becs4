@@ -155,7 +155,7 @@ classdef genAlg
                 % sandbox
                 %-----    
 
-                for parent = 1:3
+                for parent = 1:2
                     initParent = obj.nnMatrix(obj.index(parent));
     
                 %-----
@@ -179,7 +179,7 @@ classdef genAlg
 
                 for hyperparameter = 1:width(obj.evoSandBox)
                     
-                    for child = 4:obj.no_models
+                    for child = 3:obj.no_models
 
                         %set the hyperparameters for each child as the ones
                         %from the best parent
